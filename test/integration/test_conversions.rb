@@ -8,10 +8,10 @@ class TestConversions < Minitest::Test
     result = TemplateConverter.convert(slim_source, from: :slim, to: :erb)
     output = result[:output]
 
-    assert_include output, '<div>'
-    assert_include output, '<p>'
-    assert_include output, '</p>'
-    assert_include output, '</div>'
+    assert output.include?('<div>')
+    assert output.include?('<p>')
+    assert output.include?('</p>')
+    assert output.include?('</div>')
   end
 
   def test_erb_to_slim
@@ -19,8 +19,8 @@ class TestConversions < Minitest::Test
     result = TemplateConverter.convert(erb_source, from: :erb, to: :slim)
     output = result[:output]
 
-    assert_include output, 'div'
-    assert_include output, 'p'
+    assert output.include?('div')
+    assert output.include?('p')
   end
 
   def test_simple_div_slim_to_erb
@@ -28,8 +28,8 @@ class TestConversions < Minitest::Test
     result = TemplateConverter.convert(slim_source, from: :slim, to: :erb)
     output = result[:output]
 
-    assert_include output, '<div'
-    assert_include output, '/>'
+    assert output.include?('<div')
+    assert output.include?('/>')
   end
 
   def test_slim_to_haml
@@ -37,7 +37,7 @@ class TestConversions < Minitest::Test
     result = TemplateConverter.convert(slim_source, from: :slim, to: :haml)
     output = result[:output]
 
-    assert_include output, '%div'
+    assert output.include?('%div')
   end
 
   def test_haml_to_slim
@@ -45,7 +45,7 @@ class TestConversions < Minitest::Test
     result = TemplateConverter.convert(haml_source, from: :haml, to: :slim)
     output = result[:output]
 
-    assert_include output, 'div'
+    assert output.include?('div')
   end
 
   def test_erb_with_expression
@@ -53,7 +53,7 @@ class TestConversions < Minitest::Test
     result = TemplateConverter.convert(erb_source, from: :erb, to: :slim)
     output = result[:output]
 
-    assert_include output, '= @name'
+    assert output.include?('= @name')
   end
 
   def test_conversion_with_validation
@@ -66,7 +66,7 @@ class TestConversions < Minitest::Test
     )
     output = result[:output]
 
-    assert_include output, '<div'
+    assert output.include?('<div')
   end
 
   def test_conversion_returns_result_hash

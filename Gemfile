@@ -6,6 +6,7 @@ source "https://rubygems.org"
 gem 'slim', '~> 5.2'           # Slim parser (Temple S-expressions)
 gem 'haml', '~> 6.0'           # HAML parser
 gem 'temple', '~> 0.10'        # S-expressions for Slim/HAML
+gem 'herb', '~> 0.7'           # ERB parser with AST
 gem 'parser', '~> 3.3'         # Ruby AST for code analysis
 
 # CLI and utilities

@@ -15,6 +15,8 @@ GEM
       temple (>= 0.8.2)
       thor
       tilt
+    herb (0.7.5)
+    herb (0.7.5-x86_64-darwin)
     io-console (0.8.1)
     irb (1.15.3)
       pp (>= 0.6.0)
@@ -80,6 +82,7 @@ DEPENDENCIES
   benchmark-ips
   debug
   haml (~> 6.0)
+  herb (~> 0.7)
   minitest (~> 5.20)
   minitest-reporters
   parser (~> 3.3)

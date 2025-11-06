@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
-require 'erb'
+require 'herb'
 
 module TemplateConverter
   module Parsers
-    # ERB to IR parser
+    # ERB to IR parser using Herb gem
     class ErbParser < BaseParser
-      # Simple ERB parser that doesn't require a full AST library
       def parse(source)
         begin
-          tokenize_and_parse(source)
+          result = Herb.parse(source)
+          raise ParseError, "Herb parse failed" if result.errors.any?
+
+          transform_herb_ast_to_ir(result.value)
+        rescue ParseError => e
+          raise e
         rescue => e
           raise ParseError, "Failed to parse ERB: #{e.message}"
         end
@@ -17,170 +21,104 @@ module TemplateConverter
 
       private
 
-      def tokenize_and_parse(source)
-        tokens = tokenize(source)
-        parse_tokens(tokens)
-      end
+      def transform_herb_ast_to_ir(node)
+        case node
+        when Herb::AST::DocumentNode
+          # Root document
+          children = node.children.map { |child| transform_herb_ast_to_ir(child) }.compact
+          IR::Template.new(children: children)
+        when Herb::AST::HTMLElementNode
+          # HTML element like <div>, <p>, etc
+          # tag_name is a Token, access via .value
+          tag_name_str = node.tag_name.respond_to?(:value) ? node.tag_name.value : node.tag_name.to_s
+          attributes = extract_attributes(node)
+          children = (node.body || []).map { |child| transform_herb_ast_to_ir(child) }.compact
 
-      def tokenize(source)
-        tokens = []
-        pos = 0
+          self_closing = void_elements.include?(tag_name_str)
 
-        while pos < source.length
-          # Look for ERB tags
-          erb_start = source.index('<%', pos)
+          IR::Element.new(
+            tag_name: tag_name_str,
+            attributes: attributes,
+            children: children,
+            self_closing: self_closing
+          )
+        when Herb::AST::HTMLOpenTagNode
+          # Opening tag only - shouldn't occur at this level
+          nil
+        when Herb::AST::HTMLCloseTagNode
+          # Closing tag only - shouldn't occur at this level
+          nil
+        when Herb::AST::ERBContentNode
+          # ERB expression or statement
+          content_val = node.content.respond_to?(:value) ? node.content.value : node.content.to_s
+          code = content_val.to_s.strip
+          tag_opening_val = node.tag_opening.respond_to?(:value) ? node.tag_opening.value : node.tag_opening.to_s
+          tag_opening = tag_opening_val.to_s
 
-          if erb_start.nil?
-            # No more ERB tags, rest is static content
-            tokens << [:static, source[pos..-1]] if pos < source.length
-            break
-          end
-
-          # Add static content before ERB tag
-          tokens << [:static, source[pos...erb_start]] if pos < erb_start
-
-          # Find end of ERB tag
-          erb_end = source.index('%>', erb_start + 2)
-          raise ParseError, "Unclosed ERB tag at position #{erb_start}" if erb_end.nil?
-
-          # Extract ERB content
-          erb_content = source[erb_start + 2...erb_end].strip
-
-          # Determine type and store
-          if erb_content.start_with?('=')
-            # Output tag
-            code = erb_content[1..-1].strip
-            escaped = !erb_content.start_with?('==')
-            tokens << [:output, code, escaped]
-          elsif erb_content.start_with?('-')
-            # Comment tag
-            text = erb_content[1..-1].strip
-            tokens << [:comment, text]
+          case tag_opening
+          when '<%='
+            # Output with escape
+            IR::Expression.new(code: code, escaped: true)
+          when '<%=='
+            # Output without escape
+            IR::Expression.new(code: code, escaped: false)
+          when '<%#'
+            # Comment
+            IR::Comment.new(text: code, html_visible: false)
           else
-            # Code block
-            tokens << [:code, erb_content]
+            # Regular code block
+            IR::Block.new(code: code)
           end
-
-          pos = erb_end + 2
-        end
-
-        tokens
-      end
-
-      def parse_tokens(tokens)
-        children = []
-        i = 0
-
-        while i < tokens.length
-          token = tokens[i]
-
-          case token[0]
-          when :static
-            children << IR::StaticContent.new(text: token[1]) unless token[1].empty?
-          when :output
-            children << IR::Expression.new(code: token[1], escaped: token[2])
-          when :code
-            # Check if it's a control flow statement
-            code = token[1]
-            if code.match?(/^\s*(if|unless|elsif|when)\b/)
-              # This is a conditional - need to parse the full structure
-              i, conditional = parse_conditional(tokens, i)
-              children << conditional
-              next
-            elsif code.match?(/^\s*(each|while|for)\b/)
-              # This is a loop - need to parse the full structure
-              i, loop_node = parse_loop(tokens, i)
-              children << loop_node
-              next
-            else
-              # Regular code block
-              children << IR::Block.new(code: code)
-            end
-          when :comment
-            children << IR::Comment.new(text: token[1], html_visible: false)
-          end
-
-          i += 1
-        end
-
-        IR::Template.new(children: children)
-      end
-
-      def parse_conditional(tokens, start_idx)
-        # Simplified conditional parsing for basic if/else/end
-        condition_code = tokens[start_idx][1]
-        condition = extract_condition(condition_code)
-
-        true_branch = []
-        i = start_idx + 1
-
-        while i < tokens.length
-          token = tokens[i]
-          break if token[0] == :code && token[1].strip == 'end'
-
-          case token[0]
-          when :static
-            true_branch << IR::StaticContent.new(text: token[1]) unless token[1].empty?
-          when :output
-            true_branch << IR::Expression.new(code: token[1], escaped: token[2])
-          when :code
-            true_branch << IR::Block.new(code: token[1])
-          when :comment
-            true_branch << IR::Comment.new(text: token[1], html_visible: false)
-          end
-
-          i += 1
-        end
-
-        # Skip the 'end' token
-        i += 1
-
-        [i - 1, IR::Conditional.new(condition: condition, true_branch: true_branch, false_branch: [])]
-      end
-
-      def parse_loop(tokens, start_idx)
-        loop_code = tokens[start_idx][1]
-        loop_match = loop_code.match(/each\s+do\s*\|\s*(\w+)\s*\|\s*(.*)/)
-
-        if loop_match
-          variable = loop_match[1]
-          collection_part = loop_match[2]
-          # Try to extract collection from surrounding context
-          collection = collection_part.empty? ? 'collection' : collection_part
+        when Herb::AST::HTMLTextNode
+          # Plain text content
+          text_val = node.text.respond_to?(:value) ? node.text.value : node.text.to_s
+          text = text_val.to_s
+          IR::StaticContent.new(text: text) unless text.empty?
+        when Herb::AST::InterpolationNode
+          # String interpolation #{...}
+          content_val = node.content.respond_to?(:value) ? node.content.value : node.content.to_s
+          code = content_val.to_s
+          IR::Expression.new(code: code, escaped: true)
         else
-          variable = 'item'
-          collection = 'collection'
+          # Unknown node type
+          add_warning("Unknown Herb node type: #{node.class.name}")
+          nil
         end
-
-        body = []
-        i = start_idx + 1
-
-        while i < tokens.length
-          token = tokens[i]
-          break if token[0] == :code && token[1].strip == 'end'
-
-          case token[0]
-          when :static
-            body << IR::StaticContent.new(text: token[1]) unless token[1].empty?
-          when :output
-            body << IR::Expression.new(code: token[1], escaped: token[2])
-          when :code
-            body << IR::Block.new(code: token[1])
-          when :comment
-            body << IR::Comment.new(text: token[1], html_visible: false)
-          end
-
-          i += 1
-        end
-
-        # Skip the 'end' token
-        i += 1
-
-        [i - 1, IR::Loop.new(collection: collection, variable: variable, body: body)]
       end
 
-      def extract_condition(code)
-        code.gsub(/^\s*(if|unless|elsif|when)\s+/, '').strip
+      def extract_attributes(element_node)
+        attributes = {}
+
+        # Herb provides attributes through the open_tag
+        return attributes unless element_node.open_tag
+
+        open_tag = element_node.open_tag
+        return attributes unless open_tag.respond_to?(:attributes) && open_tag.attributes
+
+        open_tag.attributes.each do |attr|
+          # attr is an Herb::HTMLAttributeNode
+          key = attr.key.to_s
+          value = extract_attribute_value(attr.value)
+          attributes[key] = value if value
+        end
+
+        attributes
+      end
+
+      def extract_attribute_value(attr_value)
+        case attr_value
+        when String
+          attr_value
+        when Herb::StringNode
+          attr_value.value.to_s
+        when Herb::InterpolationNode
+          # Interpolated attribute value
+          attr_value.content.to_s
+        when nil
+          ''
+        else
+          attr_value.to_s
+        end
       end
     end
   end

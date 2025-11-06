@@ -8,7 +8,7 @@ module TemplateConverter
     class HamlParser < BaseParser
       def parse(source)
         begin
-          haml_ast = ::Haml::Parser.new(source, **parser_options).parse
+          haml_ast = ::Haml::Parser.new(source).parse
           transform_haml_ast_to_ir(haml_ast)
         rescue => e
           raise ParseError, "Failed to parse HAML: #{e.message}"
@@ -16,10 +16,6 @@ module TemplateConverter
       end
 
       private
-
-      def parser_options
-        { format: :html5 }
-      end
 
       def transform_haml_ast_to_ir(node)
         case node
