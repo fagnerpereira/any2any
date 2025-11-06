@@ -1,4 +1,4 @@
-# Template Converter
+# any2any
 
 A fast, direct converter between ERB, Slim, HAML, and Phlex Ruby templates.
 
@@ -23,13 +23,13 @@ Converting templates between different formats is tedious:
 ## Installation
 
 ```bash
-gem install template_converter
+gem install any2any
 ```
 
 Or in your Gemfile:
 
 ```ruby
-gem 'template_converter', '~> 0.1.0'
+gem 'any2any', '~> 0.1.0'
 ```
 
 ## Quick Start
@@ -38,29 +38,29 @@ gem 'template_converter', '~> 0.1.0'
 
 ```bash
 # Convert a single file
-template_converter convert app/views/users/show.html.erb \
+any2any convert app/views/users/show.html.erb \
   --from erb --to slim --output app/views/users/show.html.slim
 
 # Batch convert a directory
-template_converter batch app/views \
+any2any batch app/views \
   --from erb --to slim --recursive
 
 # Preview changes
-template_converter convert input.erb --to slim --dry-run --diff
+any2any convert input.erb --to slim --dry-run --diff
 ```
 
 ### Ruby API
 
 ```ruby
-require 'template_converter'
+require 'any2any'
 
 # Simple conversion
-result = TemplateConverter.convert(erb_source, from: :erb, to: :slim)
+result = Any2Any.convert(erb_source, from: :erb, to: :slim)
 output = result[:output]
 warnings = result[:warnings]
 
 # With options
-result = TemplateConverter.convert(
+result = Any2Any.convert(
   source,
   from: :erb,
   to: :slim,
@@ -158,7 +158,7 @@ p= @user.name
 Convert a single template file:
 
 ```bash
-template_converter convert INPUT_FILE [OPTIONS]
+any2any convert INPUT_FILE [OPTIONS]
 
 Options:
   --from FORMAT              Source format (erb, haml, slim)
@@ -177,7 +177,7 @@ Options:
 Convert multiple files in a directory:
 
 ```bash
-template_converter batch DIRECTORY [OPTIONS]
+any2any batch DIRECTORY [OPTIONS]
 
 Options:
   --from FORMAT              Source format (erb, haml, slim)

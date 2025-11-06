@@ -13,7 +13,7 @@ end
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 # Load the gem
-require 'template_converter'
+require 'any2any'
 
 class Minitest::Test
   def fixtures_dir

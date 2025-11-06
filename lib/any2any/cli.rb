@@ -9,7 +9,7 @@ module TemplateConverter
   class CLI < Thor
     desc 'version', 'Show version'
     def version
-      puts "TemplateConverter #{TemplateConverter::VERSION}"
+      puts "any2any #{Any2Any::VERSION}"
     end
 
     desc 'convert INPUT', 'Convert a template file'

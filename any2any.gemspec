@@ -2,11 +2,11 @@
 
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'template_converter/version'
+require 'any2any/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'any2any'
-  spec.version       = TemplateConverter::VERSION
+  spec.version       = Any2Any::VERSION
   spec.authors       = ['Your Name']
   spec.email         = ['your.email@example.com']
 
@@ -30,9 +30,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'haml', '~> 6.0'
   spec.add_dependency 'temple', '~> 0.10'
   spec.add_dependency 'parser', '~> 3.3'
+  spec.add_dependency 'herb', '~> 0.7'
   spec.add_dependency 'thor', '~> 1.3'
   spec.add_dependency 'pastel', '~> 0.8'
   spec.add_dependency 'tty-prompt', '~> 0.23'
+  spec.add_dependency 'diff-lcs', '~> 1.5'
 
   # Development dependencies
   spec.add_development_dependency 'minitest', '~> 5.20'
