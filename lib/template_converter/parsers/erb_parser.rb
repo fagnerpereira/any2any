@@ -71,8 +71,8 @@ module TemplateConverter
           end
         when Herb::AST::HTMLTextNode
           # Plain text content
-          text_val = node.text.respond_to?(:value) ? node.text.value : node.text.to_s
-          text = text_val.to_s
+          content_val = node.content.respond_to?(:value) ? node.content.value : node.content.to_s
+          text = content_val.to_s
           IR::StaticContent.new(text: text) unless text.empty?
         when Herb::AST::InterpolationNode
           # String interpolation #{...}

@@ -5,14 +5,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'template_converter/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'template_converter'
+  spec.name          = 'any2any'
   spec.version       = TemplateConverter::VERSION
   spec.authors       = ['Your Name']
   spec.email         = ['your.email@example.com']
 
   spec.summary       = 'Direct, efficient converter between ERB, Slim, HAML, and Phlex templates'
-  spec.description   = 'Template Converter eliminates the need for multi-step conversions (e.g., ERB → HAML → Slim). It uses AST-to-AST transformations via a unified Intermediate Representation for much faster, more accurate conversions.'
-  spec.homepage      = 'https://github.com/yourusername/template_converter'
+  spec.description   = 'any2any eliminates the need for multi-step conversions (e.g., ERB → HAML → Slim). It uses AST-to-AST transformations via a unified Intermediate Representation for much faster, more accurate conversions.'
+  spec.homepage      = 'https://github.com/yourusername/any2any'
   spec.license       = 'MIT'
 
   spec.required_ruby_version = '>= 3.0'

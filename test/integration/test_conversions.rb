@@ -29,7 +29,7 @@ class TestConversions < Minitest::Test
     output = result[:output]
 
     assert output.include?('<div')
-    assert output.include?('/>')
+    assert output.include?('</div>')
   end
 
   def test_slim_to_haml
