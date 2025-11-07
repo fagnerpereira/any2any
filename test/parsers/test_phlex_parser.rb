@@ -8,7 +8,7 @@ class TestPhlexParser < Minitest::Test
   end
 
   def test_parses_simple_element
-    source = read_fixture(:phlex, :simple_div)
+    source = File.read('test/fixtures/phlex/simple_div.rb')
     ir = @parser.parse(source)
 
     assert_instance_of TemplateConverter::IR::Template, ir
@@ -20,7 +20,7 @@ class TestPhlexParser < Minitest::Test
   end
 
   def test_parses_nested_elements
-    source = read_fixture(:phlex, :nested_slim)
+    source = File.read('test/fixtures/phlex/nested_slim.rb')
     ir = @parser.parse(source)
 
     assert_instance_of TemplateConverter::IR::Template, ir
@@ -33,7 +33,7 @@ class TestPhlexParser < Minitest::Test
   end
 
   def test_parses_element_with_attributes
-    source = read_fixture(:phlex, :attributes)
+    source = File.read('test/fixtures/phlex/attributes.rb')
     ir = @parser.parse(source)
 
     div = ir.children.first
@@ -47,7 +47,7 @@ class TestPhlexParser < Minitest::Test
   end
 
   def test_parses_expression
-    source = read_fixture(:phlex, :with_expression_slim)
+    source = File.read('test/fixtures/phlex/with_expression_slim.rb')
     ir = @parser.parse(source)
 
     div = ir.children.first
@@ -58,7 +58,7 @@ class TestPhlexParser < Minitest::Test
   end
 
   def test_parses_conditional
-    source = read_fixture(:phlex, :with_conditional)
+    source = File.read('test/fixtures/phlex/with_conditional.rb')
     ir = @parser.parse(source)
 
     div = ir.children.first
@@ -71,7 +71,7 @@ class TestPhlexParser < Minitest::Test
   end
 
   def test_parses_loop
-    source = read_fixture(:phlex, :with_loop)
+    source = File.read('test/fixtures/phlex/with_loop.rb')
     ir = @parser.parse(source)
 
     ul = ir.children.first
