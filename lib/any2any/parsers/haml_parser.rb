@@ -119,20 +119,45 @@ module Any2Any
 
       def parse_haml_element(line)
         # Parse: %tag.class#id{ attr: val } content
-        # For MVP, simplified parsing
-        match = line.match(/^%([a-z][a-z0-9]*)(.*?)(?:\s+(.*))?$/)
+        # Parse: %tag{class: "value", id: "value"} content
+        match = line.match(/^%([a-z][a-z0-9]*)/)
         return nil unless match
 
         tag_name = match[1]
-        class_and_id = match[2]
-        content = match[3]
-
-        # Parse classes and IDs
+        remaining = line[match[0].length..-1]
+        
         attributes = {}
-        class_and_id.scan(/\.([a-z0-9_-]+)/).each { |m| attributes['class'] = m[0] }
-        class_and_id.scan(/#([a-z0-9_-]+)/).each { |m| attributes['id'] = m[0] }
-
+        
+        # Parse class and id shortcuts: .class#id
+        if remaining =~ /^([\.#][a-z0-9_-]+)/
+          shortcuts = remaining.scan(/([\.#])([a-z0-9_-]+)/)
+          shortcuts.each do |type, value|
+            if type == '.'
+              attributes['class'] = [attributes['class'], value].compact.join(' ')
+            elsif type == '#'
+              attributes['id'] = value
+            end
+          end
+          # Remove parsed shortcuts from remaining
+          remaining = remaining.sub(/^[\.#][a-z0-9_-]+/, '')
+        end
+        
+        # Parse hash attributes: {key: "value", key: "value"}
+        if remaining =~ /^\{([^}]+)\}/
+          hash_attrs = $1
+          # Parse simple hash: key: "value" or key: 'value'
+          hash_attrs.scan(/(\w+):\s*["']([^"']+)["']/).each do |key, value|
+            if key == 'class' && attributes['class']
+              attributes['class'] = "#{attributes['class']} #{value}"
+            else
+              attributes[key] = value
+            end
+          end
+          remaining = remaining.sub(/^\{[^}]+\}/, '')
+        end
+        
         # Parse inline content
+        content = remaining.strip
         children = []
         children << IR::StaticContent.new(text: content) if content && !content.empty?
 

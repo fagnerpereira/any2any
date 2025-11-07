@@ -50,7 +50,7 @@ module Any2Any
       # HTML attribute escaping
       def escape_attribute(value)
         return value unless value.is_a?(String)
-        value.gsub('"', '&quot;').gsub('&', '&amp;')
+        value.gsub('&', '&amp;').gsub('"', '&quot;').gsub('<', '&lt;').gsub('>', '&gt;')
       end
 
       # HTML content escaping

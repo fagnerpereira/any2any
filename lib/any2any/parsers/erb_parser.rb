@@ -74,11 +74,6 @@ module Any2Any
           content_val = node.content.respond_to?(:value) ? node.content.value : node.content.to_s
           text = content_val.to_s
           IR::StaticContent.new(text: text) unless text.empty?
-        when Herb::AST::InterpolationNode
-          # String interpolation #{...}
-          content_val = node.content.respond_to?(:value) ? node.content.value : node.content.to_s
-          code = content_val.to_s
-          IR::Expression.new(code: code, escaped: true)
         else
           # Unknown node type
           add_warning("Unknown Herb node type: #{node.class.name}")

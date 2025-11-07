@@ -191,12 +191,15 @@ module Any2Any
 
         return attributes unless attrs_array
 
-        attrs_array.compact.each_slice(2) do |key, value|
-          next unless key
-
-          attr_key = key.to_s
-          attr_value = extract_attr_value(value)
-          attributes[attr_key] = attr_value if attr_key && attr_value
+        attrs_array.compact.each do |attr|
+          next unless attr.is_a?(Array)
+          
+          # Slim attributes are: [:html, :attr, "key", value_sexp]
+          if attr[0] == :html && attr[1] == :attr
+            attr_key = attr[2].to_s
+            attr_value = extract_attr_value(attr[3])
+            attributes[attr_key] = attr_value if attr_key && attr_value
+          end
         end
 
         attributes
@@ -212,6 +215,16 @@ module Any2Any
             value[1].to_s
           when :dynamic, :output
             value[1].to_s
+          when :escape
+            # [:escape, true/false, nested_value]
+            extract_attr_value(value[2])
+          when :slim
+            # [:slim, :interpolate, "actual_value"]
+            if value[1] == :interpolate
+              value[2].to_s
+            else
+              extract_attr_value(value[2])
+            end
           else
             value.inspect
           end

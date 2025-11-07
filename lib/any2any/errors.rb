@@ -82,6 +82,10 @@ module Any2Any
       errors.any?
     end
 
+    def any?
+      @warnings.any?
+    end
+
     def summary
       "Conversion complete: #{errors.length} errors, #{warnings.length} warnings, #{infos.length} info messages"
     end

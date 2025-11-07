@@ -15,6 +15,11 @@ module Any2Any
         raise ValidationError, "Validation failed: #{@errors.join(', ')}" if @errors.any?
       end
 
+      def transform(node)
+        validate!(node)
+        node
+      end
+
       protected
 
       def visit_template(node)

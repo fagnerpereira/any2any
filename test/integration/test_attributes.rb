@@ -70,7 +70,7 @@ class TestAttributes < Minitest::Test
   end
 
   def test_slim_with_attributes_to_erb
-    slim_source = 'div class="container" id="main"\n  p class="text" Hello'
+    slim_source = "div class=\"container\" id=\"main\"\n  p class=\"text\" Hello"
     result = Any2Any.convert(slim_source, from: :slim, to: :erb)
     output = result[:output]
 
@@ -82,7 +82,7 @@ class TestAttributes < Minitest::Test
   end
 
   def test_haml_with_attributes_to_erb
-    haml_source = '%div{class: "container", id: "main"}\n  %p{class: "text"} Hello'
+    haml_source = "%div{class: \"container\", id: \"main\"}\n  %p{class: \"text\"} Hello"
     result = Any2Any.convert(haml_source, from: :haml, to: :erb)
     output = result[:output]
 
@@ -172,7 +172,7 @@ class TestAttributes < Minitest::Test
   end
 
   def test_slim_to_haml_preserves_attributes
-    slim_source = 'div class="container mx-auto"\n  h1 class="title" Welcome'
+    slim_source = "div class=\"container mx-auto\"\n  h1 class=\"title\" Welcome"
     result = Any2Any.convert(slim_source, from: :slim, to: :haml)
     output = result[:output]
 
@@ -181,7 +181,7 @@ class TestAttributes < Minitest::Test
   end
 
   def test_haml_to_slim_preserves_attributes
-    haml_source = '%div{class: "container mx-auto"}\n  %h1{class: "title"} Welcome'
+    haml_source = "%div{class: \"container mx-auto\"}\n  %h1{class: \"title\"} Welcome"
     result = Any2Any.convert(haml_source, from: :haml, to: :slim)
     output = result[:output]
 

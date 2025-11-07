@@ -38,5 +38,5 @@ module Any2Any
 end
 
 # Public API under the gem name
-# Backwards-compatible alias so both Any2Any and Any2Any work
-Any2Any = Any2Any unless defined?(Any2Any)
+# Backwards-compatible alias for legacy code
+TemplateConverter = Any2Any

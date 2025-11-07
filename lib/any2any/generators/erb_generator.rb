@@ -57,7 +57,7 @@ module Any2Any
 
         # Self-closing tags
         if element.self_closing
-          output << " />"
+          output << ">"
           return output
         end
 
