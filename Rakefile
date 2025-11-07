@@ -3,17 +3,10 @@ require 'rake/testtask'
 
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
-  t.test_files = [
-    'test/generators/test_slim_generator.rb',
-    'test/generators/test_phlex_generator.rb',
-    'test/integration/test_conversions.rb',
-    'test/ir/test_nodes.rb',
-    'test/parsers/test_erb_parser.rb',
-    'test/parsers/test_haml_parser.rb',
-    'test/parsers/test_slim_parser.rb',
-    'test/parsers/test_phlex_parser.rb'
-  ]
+  t.libs << 'lib'
+  t.test_files = FileList['test/**/test_*.rb']
   t.verbose = true
+  t.warning = false
 end
 
 task default: :test

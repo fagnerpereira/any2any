@@ -266,12 +266,23 @@ Example: Converting `devise_bootstrap_form` (1000+ lines ERB):
 # Install dependencies
 bundle install
 
-# Run tests
+# Run all tests
 bundle exec rake test
+# or
+bin/test
 
-# Run specific test suite
-bundle exec rake test:unit
-bundle exec rake test:integration
+# Run specific test file
+bin/test test/integration/test_conversions.rb
+# or
+ruby -Itest:lib test/integration/test_conversions.rb
+
+# Run specific test method
+bin/test test/integration/test_conversions.rb -n test_slim_to_erb
+# or
+ruby -Itest:lib test/integration/test_conversions.rb -n test_slim_to_erb
+
+# Run test at specific line (finds the test method at or before that line)
+bin/test test/integration/test_conversions.rb:6
 
 # Benchmarks
 bundle exec rake benchmark
