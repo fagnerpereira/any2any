@@ -50,6 +50,8 @@ module TemplateConverter
         Parsers::HamlParser.new(@options)
       when :slim
         Parsers::SlimParser.new(@options)
+      when :phlex
+        Parsers::PhlexParser.new(@options)
       else
         raise UnsupportedFormat, "Format #{format} not supported"
       end
@@ -63,6 +65,8 @@ module TemplateConverter
         Generators::HamlGenerator.new(@options)
       when :slim
         Generators::SlimGenerator.new(@options)
+      when :phlex
+        Generators::PhlexGenerator.new(@options)
       else
         raise UnsupportedFormat, "Format #{format} not supported"
       end
