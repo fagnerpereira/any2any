@@ -90,4 +90,83 @@ class TestConversions < Minitest::Test
       TemplateConverter.convert('div', from: :slim, to: :invalid)
     end
   end
+
+  # Phlex conversion tests
+  def test_erb_to_phlex
+    erb_source = "<div><p>Hello</p></div>"
+    result = TemplateConverter.convert(erb_source, from: :erb, to: :phlex)
+    output = result[:output]
+
+    assert output.include?('Phlex::HTML')
+    assert output.include?('view_template')
+    assert output.include?('div')
+    assert output.include?('p')
+  end
+
+  def test_phlex_to_erb
+    phlex_source = <<~RUBY
+      class SimpleComponent < Phlex::HTML
+        def view_template
+          div do
+            p { "Hello" }
+          end
+        end
+      end
+    RUBY
+
+    result = TemplateConverter.convert(phlex_source, from: :phlex, to: :erb)
+    output = result[:output]
+
+    assert output.include?('<div>')
+    assert output.include?('<p>')
+    assert output.include?('Hello')
+  end
+
+  def test_slim_to_phlex
+    slim_source = "div\n  p Hello"
+    result = TemplateConverter.convert(slim_source, from: :slim, to: :phlex)
+    output = result[:output]
+
+    assert output.include?('Phlex::HTML')
+    assert output.include?('div')
+  end
+
+  def test_haml_to_phlex
+    haml_source = "%div\n  %p Hello"
+    result = TemplateConverter.convert(haml_source, from: :haml, to: :phlex)
+    output = result[:output]
+
+    assert output.include?('Phlex::HTML')
+    assert output.include?('div')
+  end
+
+  def test_phlex_to_slim
+    phlex_source = <<~RUBY
+      class SimpleComponent < Phlex::HTML
+        def view_template
+          div
+        end
+      end
+    RUBY
+
+    result = TemplateConverter.convert(phlex_source, from: :phlex, to: :slim)
+    output = result[:output]
+
+    assert output.include?('div')
+  end
+
+  def test_phlex_to_haml
+    phlex_source = <<~RUBY
+      class SimpleComponent < Phlex::HTML
+        def view_template
+          div
+        end
+      end
+    RUBY
+
+    result = TemplateConverter.convert(phlex_source, from: :phlex, to: :haml)
+    output = result[:output]
+
+    assert output.include?('%div')
+  end
 end
