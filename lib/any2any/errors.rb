@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   # Base error class
   class Error < StandardError; end
 

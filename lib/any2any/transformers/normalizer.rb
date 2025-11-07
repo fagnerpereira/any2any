@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   module Transformers
     # Normalizes IR for consistent representation
     class Normalizer < IR::Visitor

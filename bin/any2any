@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Setup bundler for development
+require 'bundler/setup'
+
+# Add lib directory to load path for development
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+
 require 'any2any'
 
 Any2Any::CLI.start(ARGV)

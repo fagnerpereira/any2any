@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   module IR
     # Base class for all IR nodes
     class Node
@@ -20,6 +20,7 @@ module TemplateConverter
       end
 
       def inspect
+
         attrs = instance_variables.map { |var| "#{var}=#{instance_variable_get(var).inspect}" }.join(', ')
         "#<#{self.class.name}:#{object_id} #{attrs}>"
       end

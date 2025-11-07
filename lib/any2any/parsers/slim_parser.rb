@@ -3,7 +3,7 @@
 require 'slim'
 require 'temple'
 
-module TemplateConverter
+module Any2Any
   module Parsers
     # Slim to IR parser using Temple
     class SlimParser < BaseParser

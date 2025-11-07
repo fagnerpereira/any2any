@@ -2,7 +2,7 @@
 
 require 'set'
 
-module TemplateConverter
+module Any2Any
   module Generators
     # Base generator class
     class BaseGenerator

@@ -4,16 +4,16 @@ require 'test_helper'
 
 class TestSlimParser < Minitest::Test
   def setup
-    @parser = TemplateConverter::Parsers::SlimParser.new
+    @parser = Any2Any::Parsers::SlimParser.new
   end
 
   def test_parses_simple_div
     source = 'div'
     ir = @parser.parse(source)
 
-    assert_instance_of TemplateConverter::IR::Template, ir
+    assert_instance_of Any2Any::IR::Template, ir
     assert_equal 1, ir.children.length
-    assert_instance_of TemplateConverter::IR::Element, ir.children.first
+    assert_instance_of Any2Any::IR::Element, ir.children.first
     assert_equal 'div', ir.children.first.tag_name
   end
 
@@ -26,7 +26,7 @@ class TestSlimParser < Minitest::Test
     assert_equal 1, div.children.length
 
     p_tag = div.children.first
-    assert_instance_of TemplateConverter::IR::Element, p_tag
+    assert_instance_of Any2Any::IR::Element, p_tag
     assert_equal 'p', p_tag.tag_name
   end
 
@@ -37,7 +37,7 @@ class TestSlimParser < Minitest::Test
     div = ir.children.first
     assert_equal 1, div.children.length
     content = div.children.first
-    assert_instance_of TemplateConverter::IR::StaticContent, content
+    assert_instance_of Any2Any::IR::StaticContent, content
     assert_equal 'Hello World', content.text
   end
 
@@ -50,7 +50,7 @@ class TestSlimParser < Minitest::Test
     assert_equal 1, p_tag.children.length
 
     expr = p_tag.children.first
-    assert_instance_of TemplateConverter::IR::Expression, expr
+    assert_instance_of Any2Any::IR::Expression, expr
     assert_equal '@name', expr.code
     assert_equal true, expr.escaped
   end
@@ -59,7 +59,7 @@ class TestSlimParser < Minitest::Test
     source = read_fixture(:slim, :simple_div)
     ir = @parser.parse(source)
 
-    assert_instance_of TemplateConverter::IR::Template, ir
+    assert_instance_of Any2Any::IR::Template, ir
     assert_equal 1, ir.children.length
     assert_equal 'div', ir.children.first.tag_name
   end

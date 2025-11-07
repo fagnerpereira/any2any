@@ -2,7 +2,7 @@
 
 require 'herb'
 
-module TemplateConverter
+module Any2Any
   module Parsers
     # ERB to IR parser using Herb gem
     class ErbParser < BaseParser

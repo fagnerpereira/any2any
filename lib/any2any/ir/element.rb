@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   module IR
     # HTML element node
     class Element < Node

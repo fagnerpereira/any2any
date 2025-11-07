@@ -4,7 +4,7 @@ require 'thor'
 require 'fileutils'
 require 'pastel'
 
-module TemplateConverter
+module Any2Any
   # CLI interface
   class CLI < Thor
     desc 'version', 'Show version'
@@ -92,6 +92,7 @@ module TemplateConverter
     option :validate, type: :boolean, desc: 'Validate IR before generating'
     option :optimize, type: :boolean, desc: 'Optimize IR'
     option :backup, type: :boolean, default: true, desc: 'Backup original files'
+
     def batch(directory)
       begin
         unless File.directory?(directory)

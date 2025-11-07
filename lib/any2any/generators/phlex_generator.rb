@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   module Generators
     # IR to Phlex generator
     class PhlexGenerator < BaseGenerator

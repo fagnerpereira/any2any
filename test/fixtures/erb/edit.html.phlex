@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+class ViewComponent < Phlex::HTML
+  def initialize(**attributes)
+    @attributes = attributes
+  end
+
+  def view_template
+    content_for :title, "Editing book"
+    div do
+      h1 do
+        plain "Editing book"
+      end
+      plain render "form", book: @book
+      plain link_to "Show this book", @book, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium"
+      plain link_to "Back to books", books_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium"
+    end
+  end
+end

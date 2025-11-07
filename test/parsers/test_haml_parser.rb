@@ -4,18 +4,18 @@ require 'test_helper'
 
 class TestHamlParser < Minitest::Test
   def setup
-    @parser = TemplateConverter::Parsers::HamlParser.new
+    @parser = Any2Any::Parsers::HamlParser.new
   end
 
   def test_parses_simple_div
     source = read_fixture(:haml, :simple)
     ir = @parser.parse(source)
 
-    assert_instance_of TemplateConverter::IR::Template, ir
+    assert_instance_of Any2Any::IR::Template, ir
     assert_equal 1, ir.children.length
 
     element = ir.children.first
-    assert_instance_of TemplateConverter::IR::Element, element
+    assert_instance_of Any2Any::IR::Element, element
     assert_equal 'div', element.tag_name
   end
 
@@ -35,7 +35,7 @@ class TestHamlParser < Minitest::Test
     ir = @parser.parse(source)
 
     expr = ir.children.first
-    assert_instance_of TemplateConverter::IR::Expression, expr
+    assert_instance_of Any2Any::IR::Expression, expr
     assert_equal '@name', expr.code
     assert_equal true, expr.escaped
   end
@@ -44,13 +44,13 @@ class TestHamlParser < Minitest::Test
     visible = "/ visible"
     ir = @parser.parse(visible)
     comment = ir.children.first
-    assert_instance_of TemplateConverter::IR::Comment, comment
+    assert_instance_of Any2Any::IR::Comment, comment
     assert_equal true, comment.html_visible
 
     invisible = "-# hidden"
     ir2 = @parser.parse(invisible)
     comment2 = ir2.children.first
-    assert_instance_of TemplateConverter::IR::Comment, comment2
+    assert_instance_of Any2Any::IR::Comment, comment2
     assert_equal false, comment2.html_visible
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   # Main converter class
   class Converter
     def initialize(options = {})

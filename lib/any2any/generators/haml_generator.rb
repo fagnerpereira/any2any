@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   module Generators
     # IR to HAML generator
     class HamlGenerator < BaseGenerator

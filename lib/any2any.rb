@@ -28,7 +28,7 @@ require 'any2any/transformers/validator'
 require 'any2any/converter'
 require 'any2any/cli'
 
-module TemplateConverter
+module Any2Any
   class << self
     # Simple conversion API
     def convert(source, from:, to:, options: {})
@@ -38,6 +38,5 @@ module TemplateConverter
 end
 
 # Public API under the gem name
-# Backwards-compatible alias so both Any2Any and TemplateConverter work
-Any2Any = TemplateConverter unless defined?(Any2Any)
-
+# Backwards-compatible alias so both Any2Any and Any2Any work
+Any2Any = Any2Any unless defined?(Any2Any)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   module Transformers
     # Optimizes IR by combining nodes and removing unnecessary structures
     class Optimizer < IR::Visitor

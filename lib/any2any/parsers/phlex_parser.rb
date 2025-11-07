@@ -2,7 +2,7 @@
 
 require 'parser/current'
 
-module TemplateConverter
+module Any2Any
   module Parsers
     # Phlex to IR parser using Ruby Parser gem
     class PhlexParser < BaseParser

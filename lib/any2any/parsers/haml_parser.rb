@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TemplateConverter
+module Any2Any
   module Parsers
     # HAML to IR parser - simplified for MVP
     class HamlParser < BaseParser

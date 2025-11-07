@@ -4,18 +4,18 @@ require 'test_helper'
 
 class TestPhlexParser < Minitest::Test
   def setup
-    @parser = TemplateConverter::Parsers::PhlexParser.new
+    @parser = Any2Any::Parsers::PhlexParser.new
   end
 
   def test_parses_simple_element
     source = File.read('test/fixtures/phlex/simple_div.rb')
     ir = @parser.parse(source)
 
-    assert_instance_of TemplateConverter::IR::Template, ir
+    assert_instance_of Any2Any::IR::Template, ir
     assert_equal 1, ir.children.length
 
     div = ir.children.first
-    assert_instance_of TemplateConverter::IR::Element, div
+    assert_instance_of Any2Any::IR::Element, div
     assert_equal 'div', div.tag_name
   end
 
@@ -23,7 +23,7 @@ class TestPhlexParser < Minitest::Test
     source = File.read('test/fixtures/phlex/nested_slim.rb')
     ir = @parser.parse(source)
 
-    assert_instance_of TemplateConverter::IR::Template, ir
+    assert_instance_of Any2Any::IR::Template, ir
     div = ir.children.first
     assert_equal 'div', div.tag_name
     assert_equal 1, div.children.length
@@ -54,7 +54,7 @@ class TestPhlexParser < Minitest::Test
     p_tag = div.children.first
 
     # The expression should be in the p tag children
-    assert p_tag.children.any? { |c| c.is_a?(TemplateConverter::IR::Expression) }
+    assert p_tag.children.any? { |c| c.is_a?(Any2Any::IR::Expression) }
   end
 
   # Note: These fixtures test more advanced features and can be enabled
@@ -66,7 +66,7 @@ class TestPhlexParser < Minitest::Test
   #   div = ir.children.first
   #   conditional = div.children.first
   #
-  #   assert_instance_of TemplateConverter::IR::Conditional, conditional
+  #   assert_instance_of Any2Any::IR::Conditional, conditional
   #   assert_equal '@show', conditional.condition
   #   assert conditional.true_branch.any?
   #   assert conditional.false_branch.any?
@@ -79,7 +79,7 @@ class TestPhlexParser < Minitest::Test
   #   ul = ir.children.first
   #   loop_node = ul.children.first
   #
-  #   assert_instance_of TemplateConverter::IR::Loop, loop_node
+  #   assert_instance_of Any2Any::IR::Loop, loop_node
   #   assert_equal '@items', loop_node.collection
   #   assert_equal 'item', loop_node.variable
   #   assert loop_node.body.any?
@@ -94,7 +94,7 @@ class TestPhlexParser < Minitest::Test
       end
     RUBY
 
-    error = assert_raises(TemplateConverter::ParseError) do
+    error = assert_raises(Any2Any::ParseError) do
       @parser.parse(source)
     end
 

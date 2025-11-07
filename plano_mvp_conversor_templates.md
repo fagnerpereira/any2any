@@ -28,7 +28,7 @@ Um conversor **direto e eficiente** entre ERB, Slim, HAML e Phlex, eliminando co
 └─────────┘
 
       ↓ OTIMIZAÇÃO FUTURA ↓
-      
+
 [Conversões Diretas para pares mais usados]
     ERB ←──────────────→ Slim
    HAML ←──────────────→ Slim
@@ -129,36 +129,36 @@ template_converter/
 **Estrutura de Nós:**
 
 ```ruby
-module TemplateConverter
+module Any2Any
   module IR
     # Nó base com visitor pattern
     class Node
       attr_reader :source_location
-      
+
       def initialize(source_location: nil)
         @source_location = source_location
       end
-      
+
       def accept(visitor)
         visitor.visit(self)
       end
     end
-    
+
     # Template raiz
     class Template < Node
       attr_reader :children
-      
+
       def initialize(children: [], **opts)
         super(**opts)
         @children = children
       end
     end
-    
+
     # Elemento HTML
     class Element < Node
       attr_reader :tag_name, :attributes, :children, :self_closing
-      
-      def initialize(tag_name:, attributes: {}, children: [], 
+
+      def initialize(tag_name:, attributes: {}, children: [],
                      self_closing: false, **opts)
         super(**opts)
         @tag_name = tag_name
@@ -167,33 +167,33 @@ module TemplateConverter
         @self_closing = self_closing
       end
     end
-    
+
     # Expressão Ruby (com output)
     class Expression < Node
       attr_reader :code, :escaped
-      
+
       def initialize(code:, escaped: true, **opts)
         super(**opts)
         @code = code
         @escaped = escaped
       end
     end
-    
+
     # Bloco de código Ruby (sem output)
     class Block < Node
       attr_reader :code, :children
-      
+
       def initialize(code:, children: [], **opts)
         super(**opts)
         @code = code
         @children = children
       end
     end
-    
+
     # Condicional
     class Conditional < Node
       attr_reader :condition, :true_branch, :false_branch
-      
+
       def initialize(condition:, true_branch: [], false_branch: [], **opts)
         super(**opts)
         @condition = condition
@@ -201,11 +201,11 @@ module TemplateConverter
         @false_branch = false_branch
       end
     end
-    
+
     # Loop
     class Loop < Node
       attr_reader :collection, :variable, :body
-      
+
       def initialize(collection:, variable:, body: [], **opts)
         super(**opts)
         @collection = collection
@@ -213,21 +213,21 @@ module TemplateConverter
         @body = body
       end
     end
-    
+
     # Conteúdo estático
     class StaticContent < Node
       attr_reader :text
-      
+
       def initialize(text:, **opts)
         super(**opts)
         @text = text
       end
     end
-    
+
     # Comentário
     class Comment < Node
       attr_reader :text, :html_visible
-      
+
       def initialize(text:, html_visible: false, **opts)
         super(**opts)
         @text = text
@@ -241,37 +241,37 @@ end
 ### 2.3 Interface Principal
 
 ```ruby
-module TemplateConverter
+module Any2Any
   class Converter
     # Conversão simples
     def self.convert(source, from:, to:, options: {})
       new(options).convert(source, from: from, to: to)
     end
-    
+
     def initialize(options = {})
       @options = default_options.merge(options)
     end
-    
+
     def convert(source, from:, to:)
       # 1. Parse source para IR
       parser = parser_for(from)
       ir = parser.parse(source)
-      
+
       # 2. Transformações opcionais
       ir = transform(ir) if @options[:optimize]
-      
+
       # 3. Validação
       validate(ir) if @options[:validate]
-      
+
       # 4. Gerar formato target
       generator = generator_for(to)
       generator.generate(ir)
     rescue => e
       handle_error(e, source, from, to)
     end
-    
+
     private
-    
+
     def parser_for(format)
       case format
       when :erb then Parsers::ErbParser.new(@options)
@@ -281,7 +281,7 @@ module TemplateConverter
       else raise UnsupportedFormat, "Format #{format} not supported"
       end
     end
-    
+
     def generator_for(format)
       case format
       when :erb then Generators::ErbGenerator.new(@options)
@@ -291,13 +291,13 @@ module TemplateConverter
       else raise UnsupportedFormat, "Format #{format} not supported"
       end
     end
-    
+
     def transform(ir)
       ir = Transformers::Normalizer.new.transform(ir)
       ir = Transformers::Optimizer.new.transform(ir) if @options[:optimize]
       ir
     end
-    
+
     def validate(ir)
       Transformers::Validator.new.validate!(ir)
     end
@@ -382,16 +382,16 @@ end
 ```ruby
 class ConversionWarning
   attr_reader :line, :column, :severity, :message, :suggestion
-  
+
   SEVERITIES = [:info, :warning, :error]
-  
+
   def initialize(line:, message:, severity: :warning, suggestion: nil)
     @line = line
     @severity = severity
     @message = message
     @suggestion = suggestion
   end
-  
+
   def to_s
     msg = "[#{severity.upcase}] Line #{line}: #{message}"
     msg += "\n  Suggestion: #{suggestion}" if suggestion
@@ -404,11 +404,11 @@ class WarningCollector
   def initialize
     @warnings = []
   end
-  
+
   def add(warning)
     @warnings << warning
   end
-  
+
   def summary
     grouped = @warnings.group_by(&:severity)
     "Conversion complete: #{grouped[:error]&.count || 0} errors, " \
@@ -469,7 +469,7 @@ gem 'pastel'                   # Colored output
 **Arquitetura de Parsers:**
 
 ```ruby
-module TemplateConverter
+module Any2Any
   module Parsers
     # Parser Slim: usa Temple S-expressions
     class SlimParser < BaseParser
@@ -478,9 +478,9 @@ module TemplateConverter
         sexp = Slim::Parser.new.call(source)
         transform_sexp_to_ir(sexp)
       end
-      
+
       private
-      
+
       def transform_sexp_to_ir(sexp)
         case sexp[0]
         when :multi
@@ -497,7 +497,7 @@ module TemplateConverter
         end
       end
     end
-    
+
     # Parser HAML: usa haml_parser gem
     class HamlParser < BaseParser
       def parse(source)
@@ -505,9 +505,9 @@ module TemplateConverter
         ast = HamlParser::Ast.parse(source)
         transform_haml_ast_to_ir(ast)
       end
-      
+
       private
-      
+
       def transform_haml_ast_to_ir(node)
         case node
         when HamlParser::Ast::Root
@@ -524,7 +524,7 @@ module TemplateConverter
         end
       end
     end
-    
+
     # Parser ERB: usa Herb
     class ErbParser < BaseParser
       def parse(source)
@@ -532,9 +532,9 @@ module TemplateConverter
         ast = Herb.parse(source)
         transform_herb_ast_to_ir(ast)
       end
-      
+
       private
-      
+
       def transform_herb_ast_to_ir(node)
         # Implementação baseada na estrutura do Herb AST
         # (documentação específica quando disponível)
@@ -662,7 +662,7 @@ Batch Summary:
 ```
               /\
              /  \     E2E: Full conversions (10%)
-            /    \    
+            /    \
            /------\   Integration: Parser→IR→Generator (30%)
           /        \
          /----------\ Unit: Individual components (60%)
@@ -705,12 +705,12 @@ require 'test_helper'
 
 class TestElement < Minitest::Test
   def test_creates_element_with_tag_name
-    element = TemplateConverter::IR::Element.new(tag_name: 'div')
+    element = Any2Any::IR::Element.new(tag_name: 'div')
     assert_equal 'div', element.tag_name
   end
-  
+
   def test_creates_self_closing_element
-    element = TemplateConverter::IR::Element.new(
+    element = Any2Any::IR::Element.new(
       tag_name: 'br',
       self_closing: true
     )
@@ -723,28 +723,28 @@ require 'test_helper'
 
 class TestSlimParser < Minitest::Test
   def setup
-    @parser = TemplateConverter::Parsers::SlimParser.new
+    @parser = Any2Any::Parsers::SlimParser.new
   end
-  
+
   def test_parses_simple_div
     source = "div"
     ir = @parser.parse(source)
-    
-    assert_instance_of TemplateConverter::IR::Template, ir
+
+    assert_instance_of Any2Any::IR::Template, ir
     assert_equal 1, ir.children.length
-    
+
     element = ir.children.first
-    assert_instance_of TemplateConverter::IR::Element, element
+    assert_instance_of Any2Any::IR::Element, element
     assert_equal 'div', element.tag_name
   end
-  
+
   def test_parses_nested_elements
     source = "div\n  p Hello"
     ir = @parser.parse(source)
-    
+
     div = ir.children.first
     assert_equal 1, div.children.length
-    
+
     p_tag = div.children.first
     assert_equal 'p', p_tag.tag_name
   end
@@ -759,41 +759,41 @@ require 'test_helper'
 
 class TestRoundtrip < Minitest::Test
   FIXTURES_DIR = File.expand_path('../fixtures', __dir__)
-  
+
   # Testa cada fixture em roundtrip
   Dir["#{FIXTURES_DIR}/**/*.{erb,haml,slim}"].each do |fixture_path|
     original_format = File.extname(fixture_path)[1..-1].to_sym
     fixture_name = File.basename(fixture_path)
-    
+
     [:erb, :haml, :slim].each do |target_format|
       next if original_format == target_format
-      
+
       define_method "test_roundtrip_#{fixture_name}_to_#{target_format}" do
         original = File.read(fixture_path)
-        
+
         # Original → Target
-        converted = TemplateConverter.convert(
+        converted = Any2Any.convert(
           original,
           from: original_format,
           to: target_format
         )
-        
+
         # Target → Original
-        back = TemplateConverter.convert(
+        back = Any2Any.convert(
           converted,
           from: target_format,
           to: original_format
         )
-        
+
         # Compare rendered output (não sintaxe)
         assert_equal render(original), render(back),
           "Roundtrip failed for #{fixture_name}"
       end
     end
   end
-  
+
   private
-  
+
   def render(template)
     # Helper para renderizar template e comparar HTML
     # Implementação depende do formato
@@ -811,41 +811,41 @@ class TestProperties < Minitest::Test
   def test_never_crashes_on_valid_slim
     100.times do
       template = generate_random_valid_slim
-      
+
       assert_nothing_raised do
-        TemplateConverter.convert(template, from: :slim, to: :haml)
+        Any2Any.convert(template, from: :slim, to: :haml)
       end
     end
   end
-  
+
   def test_preserves_tag_count
     template = generate_template_with_known_tags(10)
-    converted = TemplateConverter.convert(template, from: :slim, to: :haml)
-    
+    converted = Any2Any.convert(template, from: :slim, to: :haml)
+
     assert_equal 10, count_tags(converted)
   end
-  
+
   def test_preserves_ruby_code_in_expressions
     ruby_code = "@user.name.upcase"
     slim = "p = #{ruby_code}"
-    haml = TemplateConverter.convert(slim, from: :slim, to: :haml)
-    
+    haml = Any2Any.convert(slim, from: :slim, to: :haml)
+
     assert_includes haml, ruby_code
   end
-  
+
   private
-  
+
   def generate_random_valid_slim
     # Gera template Slim válido aleatório
     tags = %w[div p span h1 h2 ul li]
     tag = tags.sample
     "#{tag}\n  | Text content"
   end
-  
+
   def generate_template_with_known_tags(count)
     count.times.map { "div" }.join("\n")
   end
-  
+
   def count_tags(template)
     # Conta número de tags no template
     template.scan(/<\w+/).length
@@ -872,7 +872,7 @@ namespace :test do
     t.libs << 'test'
     t.test_files = FileList['test/{ir,parsers,generators}/**/*_test.rb']
   end
-  
+
   Rake::TestTask.new(:integration) do |t|
     t.libs << 'test'
     t.test_files = FileList['test/integration/**/*_test.rb']
@@ -919,22 +919,22 @@ large_slim = File.read('test/fixtures/slim/large.slim')
 
 Benchmark.ips do |x|
   x.config(time: 5, warmup: 2)
-  
+
   # Small template (< 50 lines)
   x.report("small ERB → Slim") do
-    TemplateConverter.convert(small_erb, from: :erb, to: :slim)
+    Any2Any.convert(small_erb, from: :erb, to: :slim)
   end
-  
+
   # Medium template (100-500 lines)
   x.report("medium HAML → Slim") do
-    TemplateConverter.convert(medium_haml, from: :haml, to: :slim)
+    Any2Any.convert(medium_haml, from: :haml, to: :slim)
   end
-  
+
   # Large template (> 500 lines)
   x.report("large Slim → ERB") do
-    TemplateConverter.convert(large_slim, from: :slim, to: :erb)
+    Any2Any.convert(large_slim, from: :slim, to: :erb)
   end
-  
+
   x.compare!
 end
 
@@ -953,7 +953,7 @@ class ParserCache
   def initialize
     @cache = {}
   end
-  
+
   def get_parser(format)
     @cache[format] ||= create_parser(format)
   end
@@ -967,7 +967,7 @@ class Parser
   def parse_metadata(source)
     # Parse apenas cabeçalho/estrutura básica
   end
-  
+
   def parse_full(source)
     # Parse completo apenas quando necessário
   end
@@ -992,7 +992,7 @@ end
 class Parser
   TAG_PATTERN = /\A(\w+)/.freeze
   ATTR_PATTERN = /\A\s*(\w+)=/.freeze
-  
+
   def parse_tag(line)
     line.match(TAG_PATTERN)  # Rápido (regex frozen)
   end
@@ -1006,11 +1006,11 @@ class IRPool
   def initialize
     @pool = Hash.new { |h, k| h[k] = [] }
   end
-  
+
   def acquire(klass)
     @pool[klass].pop || klass.new
   end
-  
+
   def release(obj)
     obj.reset!
     @pool[obj.class] << obj
@@ -1022,7 +1022,7 @@ end
 
 **Targets para MVP:**
 - Small files (< 100 lines): < 100ms
-- Medium files (100-500 lines): < 500ms  
+- Medium files (100-500 lines): < 500ms
 - Large files (> 500 lines): < 2s
 - Batch (100 files): < 30s
 
@@ -1069,7 +1069,7 @@ MVP (v0.1.0) ─────────── Enhancement (v0.5.0) ────
     ├─ CLI básico              ├─ Format detection            ├─ Documentation site
     ├─ Warnings                ├─ Incremental conversion      └─ Tutorials
     └─ 85% accuracy            └─ Plugin system
-    
+
   [8 semanas]                [4-6 semanas]                  [Ongoing]
 ```
 

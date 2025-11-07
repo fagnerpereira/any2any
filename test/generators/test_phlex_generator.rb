@@ -4,13 +4,13 @@ require 'test_helper'
 
 class TestPhlexGenerator < Minitest::Test
   def setup
-    @generator = TemplateConverter::Generators::PhlexGenerator.new
+    @generator = Any2Any::Generators::PhlexGenerator.new
   end
 
   def test_generates_simple_element
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Element.new(tag_name: 'div')
+        Any2Any::IR::Element.new(tag_name: 'div')
       ]
     )
 
@@ -22,12 +22,12 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_nested_elements
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Element.new(
+        Any2Any::IR::Element.new(
           tag_name: 'div',
           children: [
-            TemplateConverter::IR::Element.new(tag_name: 'p')
+            Any2Any::IR::Element.new(tag_name: 'p')
           ]
         )
       ]
@@ -41,9 +41,9 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_element_with_attributes
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Element.new(
+        Any2Any::IR::Element.new(
           tag_name: 'div',
           attributes: { 'class' => 'container', 'id' => 'main' }
         )
@@ -58,9 +58,9 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_expression
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Expression.new(code: '@name', escaped: true)
+        Any2Any::IR::Expression.new(code: '@name', escaped: true)
       ]
     )
 
@@ -70,9 +70,9 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_unescaped_expression
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Expression.new(code: '@html_content', escaped: false)
+        Any2Any::IR::Expression.new(code: '@html_content', escaped: false)
       ]
     )
 
@@ -82,9 +82,9 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_static_content
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::StaticContent.new(text: 'Hello World')
+        Any2Any::IR::StaticContent.new(text: 'Hello World')
       ]
     )
 
@@ -94,9 +94,9 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_comment
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Comment.new(text: 'This is a comment', html_visible: true)
+        Any2Any::IR::Comment.new(text: 'This is a comment', html_visible: true)
       ]
     )
 
@@ -106,12 +106,12 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_conditional
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Conditional.new(
+        Any2Any::IR::Conditional.new(
           condition: '@show',
           true_branch: [
-            TemplateConverter::IR::Element.new(tag_name: 'p')
+            Any2Any::IR::Element.new(tag_name: 'p')
           ],
           false_branch: []
         )
@@ -126,13 +126,13 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_loop
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Loop.new(
+        Any2Any::IR::Loop.new(
           collection: '@items',
           variable: 'item',
           body: [
-            TemplateConverter::IR::Element.new(tag_name: 'li')
+            Any2Any::IR::Element.new(tag_name: 'li')
           ]
         )
       ]
@@ -146,9 +146,9 @@ class TestPhlexGenerator < Minitest::Test
   end
 
   def test_generates_self_closing_element
-    ir = TemplateConverter::IR::Template.new(
+    ir = Any2Any::IR::Template.new(
       children: [
-        TemplateConverter::IR::Element.new(
+        Any2Any::IR::Element.new(
           tag_name: 'br',
           self_closing: true
         )
