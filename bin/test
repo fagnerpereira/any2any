@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Test runner that supports running tests by file, method name, or line number
+# Usage:
+#   bin/test                                    # Run all tests
+#   bin/test test/integration/test_conversions.rb    # Run specific file
+#   bin/test test/integration/test_conversions.rb -n test_slim_to_erb  # Run specific method
+#   bin/test test/integration/test_conversions.rb:6   # Run test at line 6
+
+require 'pathname'
+
+# Parse arguments
+file_arg = ARGV[0]
+extra_args = ARGV[1..]
+
+if file_arg.nil?
+  # No arguments, run all tests via rake
+  exec 'rake test'
+elsif file_arg.include?(':')
+  # Line number syntax: test/file.rb:123
+  file, line = file_arg.split(':', 2)
+  
+  unless File.exist?(file)
+    puts "Error: File not found: #{file}"
+    exit 1
+  end
+  
+  # Read the file and find the test method at or before the line
+  line_num = line.to_i
+  test_method = nil
+  
+  File.readlines(file).each_with_index do |line_content, idx|
+    current_line = idx + 1
+    break if current_line > line_num
+    
+    if line_content =~ /^\s*def\s+(test_\w+)/
+      test_method = $1
+    end
+  end
+  
+  if test_method
+    puts "Running test: #{test_method} from #{file}:#{line_num}"
+    exec "ruby -Itest:lib #{file} -n #{test_method}"
+  else
+    puts "Error: No test method found at or before line #{line_num} in #{file}"
+    exit 1
+  end
+else
+  # Regular file or file with options
+  if File.exist?(file_arg)
+    exec "ruby -Itest:lib #{file_arg} #{extra_args.join(' ')}"
+  else
+    puts "Error: File not found: #{file_arg}"
+    exit 1
+  end
+end
