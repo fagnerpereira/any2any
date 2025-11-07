@@ -359,7 +359,7 @@ end
 
 **Deixar para depois** (Fase 2):
 - ❌ Filtros especiais (`:javascript`, `:markdown`, `:ruby`)
-- 🔄 Conversão para/de Phlex (paradigma muito diferente) - **EM PROGRESSO**
+- ✅ **Conversão para/de Phlex (paradigma muito diferente) - IMPLEMENTADO E TESTADO!**
 - ❌ Helpers Rails complexos (`form_for`, `link_to` com blocos)
 - ❌ Partials e layouts (paths de arquivo)
 - ❌ Otimizações avançadas de performance
