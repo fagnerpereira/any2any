@@ -17,7 +17,7 @@ require 'any2any'
 
 class Minitest::Test
   def fixtures_dir
-    File.expand_path('../fixtures', __dir__)
+    File.expand_path('fixtures', __dir__)
   end
 
   def fixture_path(format, name)

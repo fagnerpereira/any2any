@@ -73,6 +73,9 @@ module TemplateConverter
           # Direct interpolation
           content = sexp[2].to_s
           IR::StaticContent.new(text: content)
+        when :output
+          # Dynamic output
+          IR::Expression.new(code: sexp[3].to_s, escaped: sexp[2])
         else
           nil
         end
