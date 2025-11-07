@@ -359,7 +359,7 @@ end
 
 **Deixar para depois** (Fase 2):
 - ❌ Filtros especiais (`:javascript`, `:markdown`, `:ruby`)
-- ❌ Conversão para/de Phlex (paradigma muito diferente)
+- 🔄 Conversão para/de Phlex (paradigma muito diferente) - **EM PROGRESSO**
 - ❌ Helpers Rails complexos (`form_for`, `link_to` com blocos)
 - ❌ Partials e layouts (paths de arquivo)
 - ❌ Otimizações avançadas de performance
@@ -597,9 +597,9 @@ output = SlimGenerator.new.generate(ir)
 3. ✅ Testes para todas as combinações:
    - ERB ↔ Slim
    - ERB ↔ HAML
-4. ✅ Edge cases: whitespace, comentários, atributos dinâmicos
-5. ✅ Test suite expandido: 100+ casos
-6. ✅ Testes com templates reais (gems populares)
+4. 🔄 Edge cases: whitespace, comentários, atributos dinâmicos
+5. ✅ Test suite expandido: 100+ casos (fixtures criados)
+6. ✅ Testes com templates reais (gems populares) - fixtures Rails criados
 
 **Critério de Sucesso:**
 - Conversões ERB funcionando para 85%+ dos casos comuns
@@ -611,13 +611,13 @@ output = SlimGenerator.new.generate(ir)
 **Objetivo**: Produto utilizável em produção
 
 **Tarefas:**
-1. ✅ Interface CLI completa
-2. ✅ Batch conversion (diretórios inteiros)
-3. ✅ Sistema de warnings e relatórios
+1. ✅ Interface CLI completa (bin/any2any exists)
+2. 🔄 Batch conversion (diretórios inteiros) - CLI precisa implementação completa
+3. 🔄 Sistema de warnings e relatórios - parcialmente implementado
 4. ✅ Validação de output
-5. ✅ Documentação completa
-6. ✅ Performance benchmarks
-7. ✅ Gem publicada no RubyGems
+5. 🔄 Documentação completa - README atualizado, falta CLI docs
+6. ❌ Performance benchmarks - não implementado
+7. ❌ Gem publicada no RubyGems - pronto para publicação local
 
 **CLI Interface:**
 ```bash

@@ -21,8 +21,8 @@ class TestSlimGenerator < Minitest::Test
     template = TemplateConverter::IR::Template.new(children: [div])
     output = @generator.generate(template)
 
-    assert_include output, 'div'
-    assert_include output, 'p'
+    assert_includes output, 'div'
+    assert_includes output, 'p'
   end
 
   def test_generates_expression
@@ -38,7 +38,7 @@ class TestSlimGenerator < Minitest::Test
     template = TemplateConverter::IR::Template.new(children: [content])
     output = @generator.generate(template)
 
-    assert_include output, 'Hello'
+    assert_includes output, 'Hello'
   end
 
   def test_generates_block
@@ -46,7 +46,7 @@ class TestSlimGenerator < Minitest::Test
     template = TemplateConverter::IR::Template.new(children: [block])
     output = @generator.generate(template)
 
-    assert_include output, '- x = 1'
+    assert_includes output, '- x = 1'
   end
 
   def test_generates_comment
@@ -54,6 +54,6 @@ class TestSlimGenerator < Minitest::Test
     template = TemplateConverter::IR::Template.new(children: [comment])
     output = @generator.generate(template)
 
-    assert_include output, '- #'
+    assert_includes output, '- #'
   end
 end
