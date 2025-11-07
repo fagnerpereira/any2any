@@ -2,6 +2,8 @@
 
 A fast, direct converter between ERB, Slim, HAML, and Phlex Ruby templates.
 
+**NEW:** Full Phlex support added! Convert between any Ruby template format including Phlex components.
+
 ## Problem
 
 Converting templates between different formats is tedious:
@@ -73,13 +75,14 @@ result = Any2Any.convert(
 
 ## Supported Formats
 
-| From/To | ERB | HAML | Slim |
-|---------|-----|------|------|
-| **ERB** | - | ✅ | ✅ |
-| **HAML** | ✅ | - | ✅ |
-| **Slim** | ✅ | ✅ | - |
+| From/To | ERB | HAML | Slim | Phlex |
+|---------|-----|------|------|-------|
+| **ERB** | - | ✅ | ✅ | ✅ |
+| **HAML** | ✅ | - | ✅ | ✅ |
+| **Slim** | ✅ | ✅ | - | ✅ |
+| **Phlex** | ✅ | ✅ | ✅ | - |
 
-✅ = Working in MVP
+✅ = Working and tested
 
 ## Supported Syntax
 
@@ -151,6 +154,21 @@ p= @user.name
   %p= user.name
 ```
 
+```ruby
+# Phlex
+class UsersComponent < Phlex::HTML
+  def initialize(users:)
+    @users = users
+  end
+
+  def view_template
+    @users.each do |user|
+      p { user.name }
+    end
+  end
+end
+```
+
 ## CLI Commands
 
 ### `convert`
@@ -161,8 +179,8 @@ Convert a single template file:
 any2any convert INPUT_FILE [OPTIONS]
 
 Options:
-  --from FORMAT              Source format (erb, haml, slim)
-  --to FORMAT                Target format (erb, haml, slim)
+  --from FORMAT              Source format (erb, haml, slim, phlex)
+  --to FORMAT                Target format (erb, haml, slim, phlex)
   -o, --output FILE          Output file (default: auto-detect from extension)
   -n, --dry-run              Show output without writing
   --diff                     Show diff with original
@@ -180,8 +198,8 @@ Convert multiple files in a directory:
 any2any batch DIRECTORY [OPTIONS]
 
 Options:
-  --from FORMAT              Source format (erb, haml, slim)
-  --to FORMAT                Target format (erb, haml, slim)
+  --from FORMAT              Source format (erb, haml, slim, phlex)
+  --to FORMAT                Target format (erb, haml, slim, phlex)
   -r, --recursive            Recurse into subdirectories (default: true)
   -p, --pattern PATTERN      File pattern to match (default: *)
   -n, --dry-run              Show what would be done
@@ -266,10 +284,10 @@ COVERAGE=true bundle exec rake test
 
 Contributions welcome! Areas for improvement:
 - Additional format support (Liquid, Mustache, etc.)
-- Phlex support
-- Special filter handling
+- Special filter handling (`:javascript`, `:markdown`, etc.)
 - Performance optimizations
-- Documentation
+- Advanced Rails helpers support
+- Documentation and examples
 
 ## License
 
@@ -279,16 +297,18 @@ MIT - see LICENSE.md
 
 ### v0.1 (MVP) - Current
 - ✅ ERB, HAML, Slim support
+- ✅ **Phlex support** (NEW!)
 - ✅ Basic features (tags, attributes, expressions, loops, conditionals)
 - ✅ CLI with batch conversion
 - ✅ 85%+ accuracy on common templates
+- ✅ Full bidirectional conversions between all formats
 
-### v0.5 (Enhanced)
-- 🔄 Phlex support
-- 🔄 Special filters
-- 🔄 Complex Rails helpers
+### v0.5 (Enhanced) - Planned
+- 🔄 Special filters (`:javascript`, `:markdown`, `:ruby`)
+- 🔄 Complex Rails helpers (`form_with`, `link_to` with blocks)
 - 🔄 Format auto-detection
 - 🔄 Incremental conversion
+- 🔄 Advanced Phlex features (nested components, slots)
 
 ### v1.0 (Stable)
 - 🔄 LSP integration
