@@ -7,12 +7,12 @@ require 'any2any/version'
 Gem::Specification.new do |spec|
   spec.name          = 'any2any'
   spec.version       = Any2Any::VERSION
-  spec.authors       = ['Your Name']
-  spec.email         = ['your.email@example.com']
+  spec.authors       = ['Contributors']
+  spec.email         = ['noreply@any2any.dev']
 
   spec.summary       = 'Direct, efficient converter between ERB, Slim, HAML, and Phlex templates'
-  spec.description   = 'any2any eliminates the need for multi-step conversions (e.g., ERB → HAML → Slim). It uses AST-to-AST transformations via a unified Intermediate Representation for much faster, more accurate conversions.'
-  spec.homepage      = 'https://github.com/yourusername/any2any'
+  spec.description   = 'any2any eliminates the need for multi-step conversions (e.g., ERB → HAML → Slim). It uses AST-to-AST transformations via a unified Intermediate Representation for much faster, more accurate conversions. Now with Phlex support!'
+  spec.homepage      = 'https://github.com/your-org/any2any'
   spec.license       = 'MIT'
 
   spec.required_ruby_version = '>= 3.0'
