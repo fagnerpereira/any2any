@@ -89,36 +89,47 @@ module Any2Any
       def extract_attributes(element_node)
         attributes = {}
 
-        # Herb provides attributes through the open_tag
+        # Herb provides attributes through the open_tag.children
         return attributes unless element_node.open_tag
 
         open_tag = element_node.open_tag
-        return attributes unless open_tag.respond_to?(:attributes) && open_tag.attributes
+        return attributes unless open_tag.respond_to?(:children) && open_tag.children
 
-        open_tag.attributes.each do |attr|
-          # attr is an Herb::HTMLAttributeNode
-          key = attr.key.to_s
-          value = extract_attribute_value(attr.value)
-          attributes[key] = value if value
+        open_tag.children.each do |child|
+          # child is an Herb::AST::HTMLAttributeNode
+          next unless child.is_a?(Herb::AST::HTMLAttributeNode)
+          
+          key = extract_attribute_name(child.name)
+          value = extract_attribute_value(child.value)
+          attributes[key] = value if key && value
         end
 
         attributes
       end
 
-      def extract_attribute_value(attr_value)
-        case attr_value
-        when String
-          attr_value
-        when Herb::StringNode
-          attr_value.value.to_s
-        when Herb::InterpolationNode
-          # Interpolated attribute value
-          attr_value.content.to_s
-        when nil
-          ''
-        else
-          attr_value.to_s
-        end
+      def extract_attribute_name(name_node)
+        # name_node is an HTMLAttributeNameNode with children
+        return nil unless name_node && name_node.respond_to?(:children)
+        
+        # Get the first LiteralNode child
+        literal = name_node.children.first
+        return nil unless literal && literal.respond_to?(:content)
+        
+        literal.content.to_s
+      end
+
+      def extract_attribute_value(value_node)
+        # value_node is an HTMLAttributeValueNode with children
+        return '' unless value_node && value_node.respond_to?(:children)
+        
+        # Concatenate all literal content from children
+        value_node.children.map do |child|
+          if child.respond_to?(:content)
+            child.content.to_s
+          else
+            child.to_s
+          end
+        end.join
       end
     end
   end

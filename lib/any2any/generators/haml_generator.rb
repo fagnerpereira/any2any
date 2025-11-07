@@ -50,14 +50,23 @@ module Any2Any
         output << current_indent
         output << "%#{element.tag_name}"
 
-        # Generate attributes
+        # Generate attributes using HAML hash syntax {key: "value"}
         if element.attributes.any?
-          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(value.to_s)}\"" }.join(' ')
-          output << "#{attributes_str}"
+          attrs = element.attributes.map do |key, value|
+            # Use symbol keys for HAML
+            "#{key}: \"#{escape_attribute(value.to_s)}\""
+          end.join(', ')
+          output << "{#{attrs}}"
         end
 
         # Self-closing tags
         if element.self_closing
+          return output
+        end
+
+        # Handle inline text content
+        if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
+          output << " #{element.children.first.text.strip}"
           return output
         end
 
@@ -147,6 +156,9 @@ module Any2Any
       end
 
       def generate_static_content(content)
+        # Skip whitespace-only content
+        return "" if content.text.strip.empty?
+        
         output = String.new
         output << current_indent
         output << content.text

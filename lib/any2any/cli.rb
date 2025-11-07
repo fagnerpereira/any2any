@@ -50,9 +50,7 @@ module Any2Any
         if options[:output]
           output_file = options[:output]
         elsif !options[:dry_run]
-          ext_from = File.extname(input_file)
-          ext_to = ".#{options[:to]}"
-          output_file = input_file.sub(/#{Regexp.escape(ext_from)}$/, ext_to)
+          output_file = determine_output_filename(input_file, options[:from], options[:to])
         end
 
         if options[:dry_run]
@@ -133,9 +131,7 @@ module Any2Any
               warned += 1
             else
               unless options[:dry_run]
-                ext_from = File.extname(file)
-                ext_to = ".#{options[:to]}"
-                output_file = file.sub(/#{Regexp.escape(ext_from)}$/, ext_to)
+                output_file = determine_output_filename(file, options[:from], options[:to])
 
                 if File.exist?(output_file) && options[:backup]
                   backup_file = "#{output_file}.bak"
@@ -196,6 +192,26 @@ module Any2Any
       puts "\n" + pastel.blue("=== Diff ===")
       hunks = Diff::LCS::Hunk.hunks(content1, diffs)
       hunks.each { |hunk| puts hunk }
+    end
+
+    def determine_output_filename(input_file, from_format, to_format)
+      # Handle Phlex special case: .phlex files should be .rb
+      if to_format.to_s == 'phlex'
+        # Convert to .rb extension
+        # Remove any template extensions like .html.erb, .html.slim, etc.
+        base = input_file.sub(/\.(html\.)?(erb|slim|haml|phlex)$/, '')
+        "#{base}.rb"
+      elsif from_format.to_s == 'phlex'
+        # Converting from Phlex (.rb) to another format
+        # Add appropriate template extension
+        base = input_file.sub(/\.rb$/, '')
+        "#{base}.html.#{to_format}"
+      else
+        # Standard conversion between template formats
+        ext_from = File.extname(input_file)
+        ext_to = ".#{to_format}"
+        input_file.sub(/#{Regexp.escape(ext_from)}$/, ext_to)
+      end
     end
   end
 end
