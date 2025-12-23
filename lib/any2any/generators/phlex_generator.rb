@@ -204,7 +204,10 @@ module Any2Any
       end
 
       def escape_quotes(text)
-        text.to_s.gsub('"', '\\"')
+        text.to_s
+            .gsub('\\') { '\\\\' }
+            .gsub('"') { '\\"' }
+            .gsub('#{') { '\\#{' }
       end
     end
   end
