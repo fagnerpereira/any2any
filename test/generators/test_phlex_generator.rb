@@ -160,4 +160,22 @@ class TestPhlexGenerator < Minitest::Test
     assert_match(/br/, output)
     refute_match(/br do/, output)
   end
+
+  def test_escapes_interpolation_in_attributes
+    ir = Any2Any::IR::Template.new(
+      children: [
+        Any2Any::IR::Element.new(
+          tag_name: 'div',
+          attributes: { 'class' => '#{system("echo VULNERABLE")}' }
+        )
+      ]
+    )
+
+    output = @generator.generate(ir)
+
+    # Should contain escaped interpolation sequence
+    assert_match(/\\#\{/, output)
+    # Should NOT contain unescaped interpolation sequence
+    refute_match(/[^\\]#\{/, output)
+  end
 end
