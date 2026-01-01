@@ -1,0 +1,192 @@
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb
+/usr/bin/ruby3.2 -I/usr/lib/ruby/vendor_ruby extconf.rb
+Rendering templates/ext/herb/error_helpers.c.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb/error_helpers.c
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `ext/herb/error_helpers.c` to the `.gitignore`
+
+Rendering templates/ext/herb/error_helpers.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb/error_helpers.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `ext/herb/error_helpers.h` to the `.gitignore`
+
+Rendering templates/ext/herb/nodes.c.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb/nodes.c
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `ext/herb/nodes.c` to the `.gitignore`
+
+Rendering templates/ext/herb/nodes.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb/nodes.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `ext/herb/nodes.h` to the `.gitignore`
+
+Rendering templates/javascript/packages/core/src/errors.ts.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/javascript/packages/core/src/errors.ts
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `javascript/packages/core/src/errors.ts` to the `.gitignore`
+
+Rendering templates/javascript/packages/core/src/node-type-guards.ts.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/javascript/packages/core/src/node-type-guards.ts
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `javascript/packages/core/src/node-type-guards.ts` to the `.gitignore`
+
+Rendering templates/javascript/packages/core/src/nodes.ts.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/javascript/packages/core/src/nodes.ts
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `javascript/packages/core/src/nodes.ts` to the `.gitignore`
+
+Rendering templates/javascript/packages/core/src/visitor.ts.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/javascript/packages/core/src/visitor.ts
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `javascript/packages/core/src/visitor.ts` to the `.gitignore`
+
+Rendering templates/javascript/packages/node/extension/error_helpers.cpp.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/javascript/packages/node/extension/error_helpers.cpp
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `javascript/packages/node/extension/error_helpers.cpp` to the `.gitignore`
+
+Rendering templates/javascript/packages/node/extension/error_helpers.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/javascript/packages/node/extension/error_helpers.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `javascript/packages/node/extension/error_helpers.h` to the `.gitignore`
+
+Rendering templates/javascript/packages/node/extension/nodes.cpp.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/javascript/packages/node/extension/nodes.cpp
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `javascript/packages/node/extension/nodes.cpp` to the `.gitignore`
+
+Rendering templates/javascript/packages/node/extension/nodes.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/javascript/packages/node/extension/nodes.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `javascript/packages/node/extension/nodes.h` to the `.gitignore`
+
+Rendering templates/lib/herb/ast/nodes.rb.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/lib/herb/ast/nodes.rb
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `lib/herb/ast/nodes.rb` to the `.gitignore`
+
+Rendering templates/lib/herb/errors.rb.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/lib/herb/errors.rb
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `lib/herb/errors.rb` to the `.gitignore`
+
+Rendering templates/lib/herb/visitor.rb.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/lib/herb/visitor.rb
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `lib/herb/visitor.rb` to the `.gitignore`
+
+Rendering templates/sig/serialized_ast_errors.rbs.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/sig/serialized_ast_errors.rbs
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `sig/serialized_ast_errors.rbs` to the `.gitignore`
+
+Rendering templates/sig/serialized_ast_nodes.rbs.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/sig/serialized_ast_nodes.rbs
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `sig/serialized_ast_nodes.rbs` to the `.gitignore`
+
+Rendering templates/src/ast_nodes.c.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/src/ast_nodes.c
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `src/ast_nodes.c` to the `.gitignore`
+
+Rendering templates/src/ast_pretty_print.c.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/src/ast_pretty_print.c
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `src/ast_pretty_print.c` to the `.gitignore`
+
+Rendering templates/src/errors.c.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/src/errors.c
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `src/errors.c` to the `.gitignore`
+
+Rendering templates/src/include/ast_nodes.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/src/include/ast_nodes.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `src/include/ast_nodes.h` to the `.gitignore`
+
+Rendering templates/src/include/ast_pretty_print.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/src/include/ast_pretty_print.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `src/include/ast_pretty_print.h` to the `.gitignore`
+
+Rendering templates/src/include/errors.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/src/include/errors.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `src/include/errors.h` to the `.gitignore`
+
+Rendering templates/src/visitor.c.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/src/visitor.c
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `src/visitor.c` to the `.gitignore`
+
+Rendering templates/wasm/error_helpers.cpp.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/wasm/error_helpers.cpp
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `wasm/error_helpers.cpp` to the `.gitignore`
+
+Rendering templates/wasm/error_helpers.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/wasm/error_helpers.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `wasm/error_helpers.h` to the `.gitignore`
+
+Rendering templates/wasm/nodes.cpp.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/wasm/nodes.cpp
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `wasm/nodes.cpp` to the `.gitignore`
+
+Rendering templates/wasm/nodes.h.erb → /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/wasm/nodes.h
+[Herb Templates] Couldn't find .gitignore
+[WARNING]: make sure to add `wasm/nodes.h` to the `.gitignore`
+
+Sources to be compiled: ["extension.c", "nodes.c", "error_helpers.c", "extension_helpers.c", "./../../src/analyze.c", "./../../src/analyze_helpers.c", "./../../src/analyzed_ruby.c", "./../../src/array.c", "./../../src/ast_node.c", "./../../src/ast_nodes.c", "./../../src/ast_pretty_print.c", "./../../src/buffer.c", "./../../src/element_source.c", "./../../src/errors.c", "./../../src/extract.c", "./../../src/herb.c", "./../../src/html_util.c", "./../../src/io.c", "./../../src/json.c", "./../../src/lexer.c", "./../../src/lexer_peek_helpers.c", "./../../src/location.c", "./../../src/main.c", "./../../src/memory.c", "./../../src/parser.c", "./../../src/parser_helpers.c", "./../../src/pretty_print.c", "./../../src/prism_helpers.c", "./../../src/range.c", "./../../src/ruby_parser.c", "./../../src/token.c", "./../../src/token_matchers.c", "./../../src/utf8.c", "./../../src/util.c", "./../../src/visitor.c", "diagnostic.c", "encoding.c", "node.c", "options.c", "pack.c", "prettyprint.c", "prism.c", "regexp.c", "serialize.c", "static_literals.c", "token_type.c", "pm_buffer.c", "pm_char.c", "pm_constant_pool.c", "pm_integer.c", "pm_list.c", "pm_memchr.c", "pm_newline_list.c", "pm_string.c", "pm_strncasecmp.c", "pm_strpbrk.c"]
+checking for prism.h... yes
+checking for herb.h... yes
+checking for nodes.h... yes
+checking for extension.h... yes
+checking for extension_helpers.h... yes
+creating extconf.h
+creating Makefile
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb
+make DESTDIR\= sitearchdir\=./.gem.20260101-3520-zyuxh4 sitelibdir\=./.gem.20260101-3520-zyuxh4 clean
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb
+make DESTDIR\= sitearchdir\=./.gem.20260101-3520-zyuxh4 sitelibdir\=./.gem.20260101-3520-zyuxh4
+compiling ./../../src/analyze.c
+compiling ./../../src/analyze_helpers.c
+compiling ./../../src/analyzed_ruby.c
+compiling ./../../src/array.c
+compiling ./../../src/ast_node.c
+compiling ./../../src/ast_nodes.c
+compiling ./../../src/ast_pretty_print.c
+compiling ./../../src/buffer.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/diagnostic.c
+compiling ./../../src/element_source.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/encoding.c
+compiling error_helpers.c
+compiling ./../../src/errors.c
+compiling extension.c
+compiling extension_helpers.c
+compiling ./../../src/extract.c
+compiling ./../../src/herb.c
+compiling ./../../src/html_util.c
+compiling ./../../src/io.c
+compiling ./../../src/json.c
+compiling ./../../src/lexer.c
+compiling ./../../src/lexer_peek_helpers.c
+compiling ./../../src/location.c
+compiling ./../../src/main.c
+compiling ./../../src/memory.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/node.c
+compiling nodes.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/options.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/pack.c
+compiling ./../../src/parser.c
+compiling ./../../src/parser_helpers.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_buffer.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_char.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_constant_pool.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_integer.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_list.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_memchr.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_newline_list.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_string.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_strncasecmp.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/util/pm_strpbrk.c
+compiling ./../../src/pretty_print.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/prettyprint.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/prism.c
+compiling ./../../src/prism_helpers.c
+compiling ./../../src/range.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/regexp.c
+compiling ./../../src/ruby_parser.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/serialize.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/static_literals.c
+compiling ./../../src/token.c
+compiling ./../../src/token_matchers.c
+compiling /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/vendor/prism/src/token_type.c
+compiling ./../../src/utf8.c
+compiling ./../../src/util.c
+compiling ./../../src/visitor.c
+linking shared-object herb/herb.so
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb
+make DESTDIR\= sitearchdir\=./.gem.20260101-3520-zyuxh4 sitelibdir\=./.gem.20260101-3520-zyuxh4 install
+/usr/bin/install -c -m 0755 herb.so ./.gem.20260101-3520-zyuxh4/herb
+
+current directory: /app/vendor/bundle/ruby/3.2.0/gems/herb-0.7.5/ext/herb
+make DESTDIR\= sitearchdir\=./.gem.20260101-3520-zyuxh4 sitelibdir\=./.gem.20260101-3520-zyuxh4 clean
