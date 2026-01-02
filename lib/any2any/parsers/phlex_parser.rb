@@ -1,30 +1,28 @@
 # frozen_string_literal: true
 
-require 'parser/current'
+require "parser/current"
 
 module Any2Any
   module Parsers
     # Phlex to IR parser using Ruby Parser gem
     class PhlexParser < BaseParser
       def parse(source)
-        begin
-          # Parse Ruby code into AST
-          buffer = Parser::Source::Buffer.new('(phlex)', source: source)
-          ast = Parser::CurrentRuby.new.parse(buffer)
+        # Parse Ruby code into AST
+        buffer = Parser::Source::Buffer.new("(phlex)", source: source)
+        ast = Parser::CurrentRuby.new.parse(buffer)
 
-          # Find the view_template method
-          view_template_method = find_view_template_method(ast)
-          raise ParseError, "No view_template method found in Phlex component" unless view_template_method
+        # Find the view_template method
+        view_template_method = find_view_template_method(ast)
+        raise ParseError, "No view_template method found in Phlex component" unless view_template_method
 
-          # Transform the method body to IR
-          transform_phlex_ast_to_ir(view_template_method)
-        rescue Parser::SyntaxError => e
-          raise ParseError, "Failed to parse Phlex: #{e.message}"
-        rescue ParseError => e
-          raise e
-        rescue => e
-          raise ParseError, "Failed to parse Phlex: #{e.message}"
-        end
+        # Transform the method body to IR
+        transform_phlex_ast_to_ir(view_template_method)
+      rescue Parser::SyntaxError => e
+        raise ParseError, "Failed to parse Phlex: #{e.message}"
+      rescue ParseError => e
+        raise e
+      rescue => e
+        raise ParseError, "Failed to parse Phlex: #{e.message}"
       end
 
       private
@@ -133,7 +131,7 @@ module Any2Any
       end
 
       def transform_send(node)
-        receiver = node.children[0]
+        node.children[0]
         method_name = node.children[1]
         args = node.children[2..-1]
 
@@ -150,7 +148,7 @@ module Any2Any
         when :raw
           # raw "text" - unescaped content
           if args.first
-            code = args.first.type == :str ? args.first.children[0] : unparse_node(args.first)
+            code = (args.first.type == :str) ? args.first.children[0] : unparse_node(args.first)
             IR::Expression.new(code: code, escaped: false)
           end
         when :comment
@@ -202,7 +200,7 @@ module Any2Any
         variable = if block_args && block_args.type == :args && block_args.children.first
           block_args.children.first.children.first.to_s
         else
-          'item'
+          "item"
         end
 
         body = transform_block_body(block_body)
@@ -223,7 +221,11 @@ module Any2Any
         else
           # Single statement
           result = transform_node(body)
-          result ? (result.is_a?(Array) ? result : [result]) : []
+          if result
+            result.is_a?(Array) ? result : [result]
+          else
+            []
+          end
         end
       end
 
@@ -241,7 +243,7 @@ module Any2Any
             end
           elsif arg.type == :str
             # String argument might be shorthand class
-            attributes['class'] = arg.children[0]
+            attributes["class"] = arg.children[0]
           end
         end
 
@@ -254,8 +256,6 @@ module Any2Any
           node.children[0].to_s
         when :str
           node.children[0]
-        else
-          nil
         end
       end
 
@@ -266,11 +266,11 @@ module Any2Any
         when :sym
           node.children[0].to_s
         when :true
-          'true'
+          "true"
         when :false
-          'false'
+          "false"
         when :nil
-          'nil'
+          "nil"
         else
           # For complex expressions, unparse them
           unparse_node(node)
@@ -278,7 +278,7 @@ module Any2Any
       end
 
       def unparse_node(node)
-        return '' if node.nil?
+        return "" if node.nil?
 
         # Convert AST node back to Ruby code
         case node.type
@@ -293,8 +293,8 @@ module Any2Any
           method = node.children[1]
           args = node.children[2..-1]
 
-          receiver_str = receiver ? "#{unparse_node(receiver)}." : ''
-          args_str = args.empty? ? '' : "(#{args.map { |a| unparse_node(a) }.join(', ')})"
+          receiver_str = receiver ? "#{unparse_node(receiver)}." : ""
+          args_str = args.empty? ? "" : "(#{args.map { |a| unparse_node(a) }.join(", ")})"
           "#{receiver_str}#{method}#{args_str}"
         when :const
           scope = node.children[0]
@@ -302,14 +302,14 @@ module Any2Any
           scope ? "#{unparse_node(scope)}::#{name}" : name.to_s
         when :begin
           # Multiple expressions
-          node.children.map { |c| unparse_node(c) }.join('; ')
+          node.children.map { |c| unparse_node(c) }.join("; ")
         else
           # Fallback
           node.children.select { |c| c.is_a?(Parser::AST::Node) || c.is_a?(Symbol) }
-              .map { |c| c.is_a?(Parser::AST::Node) ? unparse_node(c) : c.to_s }
-              .join('.')
+            .map { |c| c.is_a?(Parser::AST::Node) ? unparse_node(c) : c.to_s }
+            .join(".")
         end
-      rescue => e
+      rescue
         # If unparsing fails, return a placeholder
         "#{node.type}"
       end

@@ -17,7 +17,7 @@ class FormPartial < Phlex::HTML
         id: "error_explanation",
         class: "bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3"
       ) do
-        h2 { "#{pluralize(@book.errors.count, 'error')} prohibited this book from being saved:" }
+        h2 { "#{pluralize(@book.errors.count, "error")} prohibited this book from being saved:" }
 
         ul(class: "list-disc ml-6") do
           @book.errors.each do |error|
@@ -82,6 +82,6 @@ class FormPartial < Phlex::HTML
   end
 
   def pluralize(count, singular)
-    count == 1 ? "#{count} #{singular}" : "#{count} #{singular}s"
+    (count == 1) ? "#{count} #{singular}" : "#{count} #{singular}s"
   end
 end

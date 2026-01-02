@@ -5,13 +5,11 @@ module Any2Any
     # HAML to IR parser - simplified for MVP
     class HamlParser < BaseParser
       def parse(source)
-        begin
-          lines = source.split("\n")
-          children, _remaining = parse_lines(lines, 0, -1)
-          IR::Template.new(children: children)
-        rescue => e
-          raise ParseError, "Failed to parse HAML: #{e.message}"
-        end
+        lines = source.split("\n")
+        children, _remaining = parse_lines(lines, 0, -1)
+        IR::Template.new(children: children)
+      rescue => e
+        raise ParseError, "Failed to parse HAML: #{e.message}"
       end
 
       private
@@ -74,40 +72,40 @@ module Any2Any
 
       def parse_line(line)
         # Handle silent comment first
-        if line.start_with?('-#')
+        if line.start_with?("-#")
           text = line[2..-1].strip
           return IR::Comment.new(text: text, html_visible: false)
         end
 
         case line[0]
-        when '%'
+        when "%"
           # HTML element: %div.class#id{ attr: val }
           parse_haml_element(line)
-        when '-'
+        when "-"
           # Ruby code: - code
           code = line[1..-1].strip
-          if code.start_with?('if ') || code.start_with?('unless ')
-            IR::Conditional.new(condition: code.sub(/^(if|unless)\s+/, ''), true_branch: [], false_branch: [])
-          elsif code.start_with?('each ')
+          if code.start_with?("if ", "unless ")
+            IR::Conditional.new(condition: code.sub(/^(if|unless)\s+/, ""), true_branch: [], false_branch: [])
+          elsif code.start_with?("each ")
             # each syntax: - item.collection.each do |item|
             match = code.match(/(\w+)\.(\w+)\.each\s+do\s*\|\s*(\w+)\s*\|/)
             if match
               collection = "#{match[1]}.#{match[2]}"
               variable = match[3]
             else
-              collection = 'collection'
-              variable = 'item'
+              collection = "collection"
+              variable = "item"
             end
             IR::Loop.new(collection: collection, variable: variable, body: [])
           else
             IR::Block.new(code: code)
           end
-        when '='
+        when "="
           # Output expression: = @var
           code = line[1..-1].strip
-          escaped = !line.start_with?('==')
+          escaped = !line.start_with?("==")
           IR::Expression.new(code: code, escaped: escaped)
-        when '/'
+        when "/"
           # Comment: / comment text
           text = line[1..-1].strip
           IR::Comment.new(text: text, html_visible: true)
@@ -125,37 +123,37 @@ module Any2Any
 
         tag_name = match[1]
         remaining = line[match[0].length..-1]
-        
+
         attributes = {}
-        
+
         # Parse class and id shortcuts: .class#id
-        if remaining =~ /^([\.#][a-z0-9_-]+)/
-          shortcuts = remaining.scan(/([\.#])([a-z0-9_-]+)/)
+        if /^([.#][a-z0-9_-]+)/.match?(remaining)
+          shortcuts = remaining.scan(/([.#])([a-z0-9_-]+)/)
           shortcuts.each do |type, value|
-            if type == '.'
-              attributes['class'] = [attributes['class'], value].compact.join(' ')
-            elsif type == '#'
-              attributes['id'] = value
+            if type == "."
+              attributes["class"] = [attributes["class"], value].compact.join(" ")
+            elsif type == "#"
+              attributes["id"] = value
             end
           end
           # Remove parsed shortcuts from remaining
-          remaining = remaining.sub(/^[\.#][a-z0-9_-]+/, '')
+          remaining = remaining.sub(/^[.#][a-z0-9_-]+/, "")
         end
-        
+
         # Parse hash attributes: {key: "value", key: "value"}
         if remaining =~ /^\{([^}]+)\}/
           hash_attrs = $1
           # Parse simple hash: key: "value" or key: 'value'
           hash_attrs.scan(/(\w+):\s*["']([^"']+)["']/).each do |key, value|
-            if key == 'class' && attributes['class']
-              attributes['class'] = "#{attributes['class']} #{value}"
+            if key == "class" && attributes["class"]
+              attributes["class"] = "#{attributes["class"]} #{value}"
             else
               attributes[key] = value
             end
           end
-          remaining = remaining.sub(/^\{[^}]+\}/, '')
+          remaining = remaining.sub(/^\{[^}]+\}/, "")
         end
-        
+
         # Parse inline content
         content = remaining.strip
         children = []
