@@ -1,5 +1,5 @@
 [tools]
-ruby = "latest"
+ruby = "3.4.7"
 
 [env]
 RUBY_DEBUG_OPEN=true
