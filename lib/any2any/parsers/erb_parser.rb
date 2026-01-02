@@ -1,22 +1,20 @@
 # frozen_string_literal: true
 
-require 'herb'
+require "herb"
 
 module Any2Any
   module Parsers
     # ERB to IR parser using Herb gem
     class ErbParser < BaseParser
       def parse(source)
-        begin
-          result = Herb.parse(source)
-          raise ParseError, "Herb parse failed" if result.errors.any?
+        result = Herb.parse(source)
+        raise ParseError, "Herb parse failed" if result.errors.any?
 
-          transform_herb_ast_to_ir(result.value)
-        rescue ParseError => e
-          raise e
-        rescue => e
-          raise ParseError, "Failed to parse ERB: #{e.message}"
-        end
+        transform_herb_ast_to_ir(result.value)
+      rescue ParseError => e
+        raise e
+      rescue => e
+        raise ParseError, "Failed to parse ERB: #{e.message}"
       end
 
       private
@@ -56,13 +54,13 @@ module Any2Any
           tag_opening = tag_opening_val.to_s
 
           case tag_opening
-          when '<%='
+          when "<%="
             # Output with escape
             IR::Expression.new(code: code, escaped: true)
-          when '<%=='
+          when "<%=="
             # Output without escape
             IR::Expression.new(code: code, escaped: false)
-          when '<%#'
+          when "<%#"
             # Comment
             IR::Comment.new(text: code, html_visible: false)
           else
@@ -93,7 +91,7 @@ module Any2Any
         open_tag.children.each do |child|
           # child is an Herb::AST::HTMLAttributeNode
           next unless child.is_a?(Herb::AST::HTMLAttributeNode)
-          
+
           key = extract_attribute_name(child.name)
           value = extract_attribute_value(child.value)
           attributes[key] = value if key && value
@@ -105,18 +103,18 @@ module Any2Any
       def extract_attribute_name(name_node)
         # name_node is an HTMLAttributeNameNode with children
         return nil unless name_node && name_node.respond_to?(:children)
-        
+
         # Get the first LiteralNode child
         literal = name_node.children.first
         return nil unless literal && literal.respond_to?(:content)
-        
+
         literal.content.to_s
       end
 
       def extract_attribute_value(value_node)
         # value_node is an HTMLAttributeValueNode with children
-        return '' unless value_node && value_node.respond_to?(:children)
-        
+        return "" unless value_node && value_node.respond_to?(:children)
+
         # Concatenate all literal content from children
         value_node.children.map do |child|
           if child.respond_to?(:content)

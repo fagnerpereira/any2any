@@ -53,7 +53,7 @@ module Any2Any
 
         # Generate attributes using HTML-style syntax: class="value"
         if element.attributes.any?
-          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(value.to_s)}\"" }.join(' ')
+          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(value.to_s)}\"" }.join(" ")
           output << " #{attributes_str}"
         end
 
@@ -150,7 +150,7 @@ module Any2Any
       def generate_static_content(content)
         # Skip whitespace-only content
         return "" if content.text.strip.empty?
-        
+
         output = String.new
         output << current_indent
         output << "| #{content.text}"
@@ -161,10 +161,10 @@ module Any2Any
         output = String.new
         output << current_indent
 
-        if comment.html_visible
-          output << "/ #{comment.text}"
+        output << if comment.html_visible
+          "/ #{comment.text}"
         else
-          output << "- # #{comment.text}"
+          "- # #{comment.text}"
         end
 
         output

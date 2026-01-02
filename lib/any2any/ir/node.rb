@@ -20,8 +20,7 @@ module Any2Any
       end
 
       def inspect
-
-        attrs = instance_variables.map { |var| "#{var}=#{instance_variable_get(var).inspect}" }.join(', ')
+        attrs = instance_variables.map { |var| "#{var}=#{instance_variable_get(var).inspect}" }.join(", ")
         "#<#{self.class.name}:#{object_id} #{attrs}>"
       end
     end

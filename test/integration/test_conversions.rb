@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestConversions < Minitest::Test
   def test_slim_to_erb
@@ -8,10 +8,10 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(slim_source, from: :slim, to: :erb)
     output = result[:output]
 
-    assert output.include?('<div>')
-    assert output.include?('<p>')
-    assert output.include?('</p>')
-    assert output.include?('</div>')
+    assert output.include?("<div>")
+    assert output.include?("<p>")
+    assert output.include?("</p>")
+    assert output.include?("</div>")
   end
 
   def test_erb_to_slim
@@ -19,33 +19,33 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :slim)
     output = result[:output]
 
-    assert output.include?('div')
-    assert output.include?('p')
+    assert output.include?("div")
+    assert output.include?("p")
   end
 
   def test_simple_div_slim_to_erb
-    slim_source = 'div'
+    slim_source = "div"
     result = Any2Any.convert(slim_source, from: :slim, to: :erb)
     output = result[:output]
 
-    assert output.include?('<div')
-    assert output.include?('</div>')
+    assert output.include?("<div")
+    assert output.include?("</div>")
   end
 
   def test_slim_to_haml
-    slim_source = 'div'
+    slim_source = "div"
     result = Any2Any.convert(slim_source, from: :slim, to: :haml)
     output = result[:output]
 
-    assert output.include?('%div')
+    assert output.include?("%div")
   end
 
   def test_haml_to_slim
-    haml_source = '%div'
+    haml_source = "%div"
     result = Any2Any.convert(haml_source, from: :haml, to: :slim)
     output = result[:output]
 
-    assert output.include?('div')
+    assert output.include?("div")
   end
 
   def test_erb_with_expression
@@ -53,24 +53,24 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :slim)
     output = result[:output]
 
-    assert output.include?('= @name')
+    assert output.include?("= @name")
   end
 
   def test_conversion_with_validation
-    slim_source = 'div'
+    slim_source = "div"
     result = Any2Any.convert(
       slim_source,
       from: :slim,
       to: :erb,
-      options: { validate: true }
+      options: {validate: true}
     )
     output = result[:output]
 
-    assert output.include?('<div')
+    assert output.include?("<div")
   end
 
   def test_conversion_returns_result_hash
-    slim_source = 'div'
+    slim_source = "div"
     result = Any2Any.convert(slim_source, from: :slim, to: :erb)
 
     assert result.is_a?(Hash)
@@ -81,13 +81,13 @@ class TestConversions < Minitest::Test
 
   def test_unsupported_format_raises_error
     assert_raises(Any2Any::UnsupportedFormat) do
-      Any2Any.convert('div', from: :invalid, to: :erb)
+      Any2Any.convert("div", from: :invalid, to: :erb)
     end
   end
 
   def test_unsupported_target_format_raises_error
     assert_raises(Any2Any::UnsupportedFormat) do
-      Any2Any.convert('div', from: :slim, to: :invalid)
+      Any2Any.convert("div", from: :slim, to: :invalid)
     end
   end
 
@@ -97,10 +97,10 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :phlex)
     output = result[:output]
 
-    assert output.include?('Phlex::HTML')
-    assert output.include?('view_template')
-    assert output.include?('div')
-    assert output.include?('p')
+    assert output.include?("Phlex::HTML")
+    assert output.include?("view_template")
+    assert output.include?("div")
+    assert output.include?("p")
   end
 
   def test_phlex_to_erb
@@ -117,9 +117,9 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(phlex_source, from: :phlex, to: :erb)
     output = result[:output]
 
-    assert output.include?('<div>')
-    assert output.include?('<p>')
-    assert output.include?('Hello')
+    assert output.include?("<div>")
+    assert output.include?("<p>")
+    assert output.include?("Hello")
   end
 
   def test_slim_to_phlex
@@ -127,8 +127,8 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(slim_source, from: :slim, to: :phlex)
     output = result[:output]
 
-    assert output.include?('Phlex::HTML')
-    assert output.include?('div')
+    assert output.include?("Phlex::HTML")
+    assert output.include?("div")
   end
 
   def test_haml_to_phlex
@@ -136,8 +136,8 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(haml_source, from: :haml, to: :phlex)
     output = result[:output]
 
-    assert output.include?('Phlex::HTML')
-    assert output.include?('div')
+    assert output.include?("Phlex::HTML")
+    assert output.include?("div")
   end
 
   def test_phlex_to_slim
@@ -152,7 +152,7 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(phlex_source, from: :phlex, to: :slim)
     output = result[:output]
 
-    assert output.include?('div')
+    assert output.include?("div")
   end
 
   def test_phlex_to_haml
@@ -167,6 +167,6 @@ class TestConversions < Minitest::Test
     result = Any2Any.convert(phlex_source, from: :phlex, to: :haml)
     output = result[:output]
 
-    assert output.include?('%div')
+    assert output.include?("%div")
   end
 end

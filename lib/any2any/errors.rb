@@ -35,7 +35,7 @@ module Any2Any
 
     SEVERITIES = [:info, :warning, :error].freeze
 
-    def initialize(line: nil, column: nil, message:, severity: :warning, suggestion: nil)
+    def initialize(message:, line: nil, column: nil, severity: :warning, suggestion: nil)
       @line = line
       @column = column
       @severity = severity
@@ -44,7 +44,7 @@ module Any2Any
     end
 
     def to_s
-      msg = severity == :info ? "[INFO]" : "[#{severity.upcase}]"
+      msg = (severity == :info) ? "[INFO]" : "[#{severity.upcase}]"
       msg += " Line #{@line}" if @line
       msg += ": #{@message}"
       msg += "\n  Suggestion: #{@suggestion}" if @suggestion

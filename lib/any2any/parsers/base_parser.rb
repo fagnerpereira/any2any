@@ -13,9 +13,7 @@ module Any2Any
         raise NotImplementedError, "#{self.class} must implement #parse"
       end
 
-      def warnings
-        @warnings
-      end
+      attr_reader :warnings
 
       protected
 
