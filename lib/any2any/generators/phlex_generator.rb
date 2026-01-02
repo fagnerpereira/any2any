@@ -206,9 +206,9 @@ module Any2Any
       def escape_quotes(text)
         # Escape backslashes first, then quotes, then interpolation
         text.to_s
-            .gsub('\\', '\\\\\\') # Escape backslashes
-            .gsub('"', '\\"')     # Escape quotes
-            .gsub('#', '\#')      # Escape interpolation
+            .gsub('\\', '\\\\\\\\') # Escape backslashes
+            .gsub('"', '\\"')       # Escape quotes
+            .gsub('#', '\#')        # Escape interpolation
       end
     end
   end
