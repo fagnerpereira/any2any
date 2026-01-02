@@ -22,7 +22,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    minitest (5.26.0)
+    minitest (5.27.0)
     minitest-reporters (1.7.1)
       ansi
       builder
