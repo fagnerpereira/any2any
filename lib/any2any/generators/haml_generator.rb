@@ -64,8 +64,11 @@ module Any2Any
           return output
         end
 
-        # Handle inline text content
-        if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
+        # Handle inline text content (only if single line)
+        if element.children.length == 1 &&
+           element.children.first.is_a?(IR::StaticContent) &&
+           !element.children.first.text.strip.include?("\n")
+
           output << " #{element.children.first.text.strip}"
           return output
         end
@@ -159,9 +162,26 @@ module Any2Any
         # Skip whitespace-only content
         return "" if content.text.strip.empty?
 
+        lines = content.text.lines
         output = String.new
-        output << current_indent
-        output << content.text
+
+        lines.each_with_index do |line, index|
+          stripped_line = line.strip
+          next if stripped_line.empty?
+
+          # Add newline between lines, but not before the first one
+          output << "\n" if index > 0
+
+          output << current_indent
+
+          # Escape special HAML characters at start of line
+          if stripped_line.match?(/^[%.#=\-\/!]/)
+            output << "\\"
+          end
+
+          output << stripped_line
+        end
+
         output
       end
 
