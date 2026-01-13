@@ -40,7 +40,7 @@ module Any2Any
         when IR::Comment
           generate_comment(node)
         else
-          ""
+          ''
         end
       end
 
@@ -57,11 +57,11 @@ module Any2Any
 
         # Self-closing tags
         if element.self_closing
-          output << ">"
+          output << '>'
           return output
         end
 
-        output << ">"
+        output << '>'
 
         # Generate children
         element.children.each do |child|
@@ -93,13 +93,13 @@ module Any2Any
         end
 
         if conditional.false_branch.any?
-          output << "<% else %>"
+          output << '<% else %>'
           conditional.false_branch.each do |child|
             output << generate_node(child)
           end
         end
 
-        output << "<% end %>"
+        output << '<% end %>'
         output
       end
 
@@ -111,12 +111,13 @@ module Any2Any
           output << generate_node(child)
         end
 
-        output << "<% end %>"
+        output << '<% end %>'
         output
       end
 
       def generate_static_content(content)
-        content.text
+        # Escape ERB tags in static content to prevent SSTI
+        content.text.gsub('<%', '<%%')
       end
 
       def generate_comment(comment)
