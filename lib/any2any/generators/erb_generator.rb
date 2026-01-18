@@ -116,7 +116,8 @@ module Any2Any
       end
 
       def generate_static_content(content)
-        content.text
+        # Escape ERB tags in static content to prevent template injection
+        content.text.gsub("<%", "<%%")
       end
 
       def generate_comment(comment)
