@@ -41,7 +41,7 @@ module Any2Any
         when IR::Comment
           generate_comment(node)
         else
-          ""
+          ''
         end
       end
 
@@ -55,19 +55,23 @@ module Any2Any
           attrs = element.attributes.map do |key, value|
             # Use symbol keys for HAML
             "#{key}: \"#{escape_attribute(value.to_s)}\""
-          end.join(", ")
+          end.join(', ')
           output << "{#{attrs}}"
         end
 
         # Self-closing tags
-        if element.self_closing
-          return output
-        end
+        return output if element.self_closing
 
         # Handle inline text content
         if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
-          output << " #{element.children.first.text.strip}"
-          return output
+          text_content = element.children.first.text
+          # Only optimize if single line to avoid indentation issues
+          unless text_content.include?("\n")
+            # Escape interpolation sequence to prevent code execution
+            escaped_text = text_content.gsub('#{', '\#{')
+            output << " #{escaped_text.strip}"
+            return output
+          end
         end
 
         # Generate children
@@ -89,10 +93,10 @@ module Any2Any
         output << current_indent
 
         output << if expr.escaped
-          "= #{expr.code}"
-        else
-          "!= #{expr.code}"
-        end
+                    "= #{expr.code}"
+                  else
+                    "!= #{expr.code}"
+                  end
 
         output
       end
@@ -157,12 +161,31 @@ module Any2Any
 
       def generate_static_content(content)
         # Skip whitespace-only content
-        return "" if content.text.strip.empty?
+        return '' if content.text.strip.empty?
 
         output = String.new
-        output << current_indent
-        output << content.text
-        output
+
+        content.text.each_line do |line|
+          line_content = line.chomp
+
+          if line_content.strip.empty?
+            output << "\n"
+            next
+          end
+
+          output << current_indent
+
+          # Escape interpolation sequence to prevent code execution
+          line_content = line_content.gsub('#{', '\#{')
+
+          # Escape lines starting with HAML special characters
+          output << '\\' if line_content.lstrip.match?(%r{^[%#=\-~/.!:\\]})
+
+          output << line_content
+          output << "\n"
+        end
+
+        output.chomp
       end
 
       def generate_comment(comment)
@@ -170,10 +193,10 @@ module Any2Any
         output << current_indent
 
         output << if comment.html_visible
-          "/ #{comment.text}"
-        else
-          "-# #{comment.text}"
-        end
+                    "/ #{comment.text}"
+                  else
+                    "-# #{comment.text}"
+                  end
 
         output
       end
