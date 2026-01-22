@@ -53,7 +53,10 @@ module Any2Any
 
         # Generate attributes using HTML-style syntax: class="value"
         if element.attributes.any?
-          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(value.to_s)}\"" }.join(" ")
+          attributes_str = element.attributes.map do |key, value|
+            # Escape both HTML chars and Slim interpolation sequences
+            "#{key}=\"#{escape_attribute(escape_slim_text(value.to_s))}\""
+          end.join(" ")
           output << " #{attributes_str}"
         end
 
@@ -63,8 +66,10 @@ module Any2Any
         end
 
         # Handle inline text content
-        if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
-          output << " #{element.children.first.text.strip}"
+        # Only if single child, is StaticContent, AND has no newlines (multiline breaks inline structure)
+        child = element.children.first
+        if element.children.length == 1 && child.is_a?(IR::StaticContent) && !child.text.include?("\n")
+          output << " #{escape_slim_text(child.text.strip)}"
           return output
         end
 
@@ -152,9 +157,18 @@ module Any2Any
         return "" if content.text.strip.empty?
 
         output = String.new
-        output << current_indent
-        output << "| #{content.text}"
-        output
+
+        # Handle multiline text safely
+        lines = content.text.lines
+        lines.each do |line|
+          next if line.strip.empty?
+
+          output << current_indent
+          output << "| #{escape_slim_text(line.rstrip)}"
+          output << "\n"
+        end
+
+        output.rstrip
       end
 
       def generate_comment(comment)
@@ -168,6 +182,13 @@ module Any2Any
         end
 
         output
+      end
+
+      # Escape Slim interpolation sequences
+      def escape_slim_text(text)
+        return text unless text.is_a?(String)
+        # Replace `#{` with `\#{` to prevent interpolation
+        text.gsub('#{', '\#{')
       end
     end
   end
