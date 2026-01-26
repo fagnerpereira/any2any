@@ -51,6 +51,23 @@ module Any2Any
         value.gsub("&", "&amp;").gsub('"', "&quot;").gsub("<", "&lt;").gsub(">", "&gt;")
       end
 
+      # Ruby string escaping (for HAML/Slim attributes)
+      def escape_ruby_string(value)
+        return value unless value.is_a?(String)
+        # Escape backslashes, quotes, and interpolation
+        value.gsub('\\') { '\\\\' }
+             .gsub('"', '\"')
+             .gsub('#{') { '\#{' }
+      end
+
+      # Interpolation escaping (for HAML/Slim text content)
+      def escape_interpolation(value)
+        return value unless value.is_a?(String)
+        # Escape backslashes and interpolation
+        value.gsub('\\') { '\\\\' }
+             .gsub('#{') { '\#{' }
+      end
+
       # HTML content escaping
       def escape_html(content)
         return content unless content.is_a?(String)

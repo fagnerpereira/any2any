@@ -1,0 +1,329 @@
+/usr/bin/ruby3.2 -I"lib:test:lib" /app/vendor/bundle/ruby/3.2.0/gems/rake-13.3.1/lib/rake/rake_test_loader.rb "test/generators/test_erb_generator.rb" "test/generators/test_haml_generator.rb" "test/generators/test_phlex_generator.rb" "test/generators/test_slim_generator.rb" "test/generators/test_slim_generator_comprehensive.rb" "test/integration/test_attributes.rb" "test/integration/test_cli.rb" "test/integration/test_cli_file_extensions.rb" "test/integration/test_conversions.rb" "test/ir/test_nodes.rb" "test/ir/test_visitor.rb" "test/parsers/test_erb_parser.rb" "test/parsers/test_erb_parser_comprehensive.rb" "test/parsers/test_haml_parser.rb" "test/parsers/test_haml_parser_comprehensive.rb" "test/parsers/test_phlex_parser.rb" "test/parsers/test_phlex_parser_comprehensive.rb" "test/parsers/test_slim_parser.rb" "test/parsers/test_slim_parser_comprehensive.rb" "test/security/test_generator_injection.rb" "test/security/test_phlex_injection.rb" "test/test_any2any.rb" "test/test_converter.rb" "test/test_errors.rb" "test/test_helper.rb" "test/transformers/test_normalizer.rb" "test/transformers/test_optimizer.rb" "test/transformers/test_validator.rb" -v
+warning: parser/current is loading parser/ruby32, which recognizes 3.2.9-compliant syntax, but you are running 3.2.3.
+Please see https://github.com/whitequark/parser#compatibility-with-ruby-mri.
+Coverage report generated for Integration Tests, Unit Tests to /app/coverage.
+Line Coverage: 25.93% (342 / 1319)
+Started with run options -v --seed 48942
+
+TestPhlexParserComprehensive
+  test_parses_each_loop                                          [32m PASS[0m (0.00s)
+  test_parses_string_interpolation                               [32m PASS[0m (0.00s)
+  test_parses_multiple_elements                                  [32m PASS[0m (0.00s)
+  test_parses_simple_component                                   [32m PASS[0m (0.00s)
+  test_parses_nested_elements                                    [32m PASS[0m (0.00s)
+  test_parses_unsafe_raw                                         [32m PASS[0m (0.00s)
+  test_parses_plain_text                                         [32m PASS[0m (0.00s)
+  test_parses_self_closing_tags                                  [32m PASS[0m (0.00s)
+  test_parses_comment                                            [32m PASS[0m (0.00s)
+  test_raises_without_view_template                              [32m PASS[0m (0.00s)
+  test_parses_conditional                                        [32m PASS[0m (0.00s)
+  test_handles_invalid_ruby                                      [32m PASS[0m (0.00s)
+  test_parses_component_with_attributes                          [32m PASS[0m (0.00s)
+  test_parses_render_call                                        [32m PASS[0m (0.00s)
+  test_parses_whitespace                                         [32m PASS[0m (0.00s)
+  test_parses_component_with_content                             [32m PASS[0m (0.00s)
+
+TestAttributes
+  test_erb_with_data_attributes_to_haml                          [32m PASS[0m (0.00s)
+  test_haml_to_slim_preserves_attributes                         [32m PASS[0m (0.00s)
+  test_erb_with_data_attributes_to_slim                          [32m PASS[0m (0.00s)
+  test_erb_with_id_and_class_to_haml                             [32m PASS[0m (0.00s)
+  test_erb_with_multiple_attributes_to_slim                      [32m PASS[0m (0.00s)
+  test_erb_with_id_and_class_to_slim                             [32m PASS[0m (0.00s)
+  test_erb_with_inline_text_to_slim                              [32m PASS[0m (0.00s)
+  test_slim_to_haml_preserves_attributes                         [32m PASS[0m (0.00s)
+  test_erb_with_multiple_attributes_to_haml                      [32m PASS[0m (0.00s)
+  test_complex_erb_to_slim_preserves_all_attributes              [32m PASS[0m (0.00s)
+  test_erb_with_class_attributes_to_haml                         [32m PASS[0m (0.00s)
+  test_erb_with_class_attributes_to_slim                         [32m PASS[0m (0.00s)
+  test_complex_erb_to_haml_preserves_all_attributes              [32m PASS[0m (0.00s)
+  test_erb_to_phlex_with_attributes                              [32m PASS[0m (0.00s)
+  test_erb_with_inline_text_to_haml                              [32m PASS[0m (0.00s)
+  test_slim_with_attributes_to_erb                               [32m PASS[0m (0.00s)
+  test_haml_with_attributes_to_erb                               [32m PASS[0m (0.00s)
+
+TestVisitor
+  test_visitor_visit_element                                     [32m PASS[0m (0.00s)
+  test_visitor_visit_expression                                  [32m PASS[0m (0.00s)
+  test_visitor_visit_template                                    [32m PASS[0m (0.00s)
+  test_visitor_can_be_inherited                                  [32m PASS[0m (0.00s)
+  test_visitor_visit_comment                                     [32m PASS[0m (0.00s)
+  test_visitor_visit_block                                       [32m PASS[0m (0.00s)
+  test_visitor_visit_static_content                              [32m PASS[0m (0.00s)
+  test_visitor_visit_loop                                        [32m PASS[0m (0.00s)
+  test_visitor_visit_conditional                                 [32m PASS[0m (0.00s)
+
+TestIRNodes
+  test_element_with_attributes                                   [32m PASS[0m (0.00s)
+  test_static_content_creation                                   [32m PASS[0m (0.00s)
+  test_expression_creation                                       [32m PASS[0m (0.00s)
+  test_self_closing_element                                      [32m PASS[0m (0.00s)
+  test_expression_unescaped                                      [32m PASS[0m (0.00s)
+  test_template_creation                                         [32m PASS[0m (0.00s)
+  test_html_visible_comment                                      [32m PASS[0m (0.00s)
+  test_node_equality                                             [32m PASS[0m (0.00s)
+  test_comment_creation                                          [32m PASS[0m (0.00s)
+  test_template_with_children                                    [32m PASS[0m (0.00s)
+  test_element_creation                                          [32m PASS[0m (0.00s)
+  test_block_creation                                            [32m PASS[0m (0.00s)
+  test_conditional_creation                                      [32m PASS[0m (0.00s)
+  test_loop_creation                                             [32m PASS[0m (0.00s)
+  test_conditional_with_branches                                 [32m PASS[0m (0.00s)
+
+TestValidator
+  test_validate_returns_same_ir                                  [32m PASS[0m (0.00s)
+  test_validate_template                                         [32m PASS[0m (0.00s)
+
+TestNormalizer
+  test_normalize_returns_same_ir                                 [32m PASS[0m (0.00s)
+  test_normalize_template                                        [32m PASS[0m (0.00s)
+
+TestErrors
+  test_warning_collector_has_errors                              [32m PASS[0m (0.00s)
+  test_unsupported_format_error_exists                           [32m PASS[0m (0.00s)
+  test_warning_collector_add_warning                             [32m PASS[0m (0.00s)
+  test_warning_collector_filter_by_severity                      [32m PASS[0m (0.00s)
+  test_warning_collector_clear                                   [32m PASS[0m (0.00s)
+  test_warning_collector_all                                     [32m PASS[0m (0.00s)
+  test_warning_collector_summary                                 [32m PASS[0m (0.00s)
+  test_conversion_warning_to_s                                   [32m PASS[0m (0.00s)
+  test_warning_collector_to_s                                    [32m PASS[0m (0.00s)
+  test_parse_error_exists                                        [32m PASS[0m (0.00s)
+  test_conversion_warning_creation                               [32m PASS[0m (0.00s)
+  test_conversion_warning_without_line                           [32m PASS[0m (0.00s)
+  test_warning_collector_exists                                  [32m PASS[0m (0.00s)
+  test_error_classes_inherit_from_standard_error                 [32m PASS[0m (0.00s)
+
+TestPhlexInjection
+  test_backslash_injection                                       [32m PASS[0m (0.00s)
+  test_attribute_injection                                       [32m PASS[0m (0.00s)
+  test_interpolation_injection                                   [32m PASS[0m (0.00s)
+
+TestConversions
+  test_haml_to_phlex                                             [32m PASS[0m (0.00s)
+  test_slim_to_haml                                              [32m PASS[0m (0.00s)
+  test_haml_to_slim                                              [32m PASS[0m (0.00s)
+  test_slim_to_erb                                               [32m PASS[0m (0.00s)
+  test_phlex_to_erb                                              [32m PASS[0m (0.00s)
+  test_slim_to_phlex                                             [32m PASS[0m (0.00s)
+  test_phlex_to_haml                                             [32m PASS[0m (0.00s)
+  test_simple_div_slim_to_erb                                    [32m PASS[0m (0.00s)
+  test_conversion_with_validation                                [32m PASS[0m (0.00s)
+  test_unsupported_target_format_raises_error                    [32m PASS[0m (0.00s)
+  test_erb_with_expression                                       [32m PASS[0m (0.00s)
+  test_conversion_returns_result_hash                            [32m PASS[0m (0.00s)
+  test_erb_to_phlex                                              [32m PASS[0m (0.00s)
+  test_phlex_to_slim                                             [32m PASS[0m (0.00s)
+  test_unsupported_format_raises_error                           [32m PASS[0m (0.00s)
+  test_erb_to_slim                                               [32m PASS[0m (0.00s)
+
+TestAny2Any
+  test_module_structure                                          [32m PASS[0m (0.00s)
+  test_transformer_classes_exist                                 [32m PASS[0m (0.00s)
+  test_template_converter_alias                                  [32m PASS[0m (0.00s)
+  test_ir_classes_exist                                          [32m PASS[0m (0.00s)
+  test_parser_classes_exist                                      [32m PASS[0m (0.00s)
+  test_any2any_module_exists                                     [32m PASS[0m (0.00s)
+  test_version_constant_exists                                   [32m PASS[0m (0.00s)
+  test_generator_classes_exist                                   [32m PASS[0m (0.00s)
+  test_any2any_convert_method                                    [32m PASS[0m (0.00s)
+  test_cli_class_exists                                          [32m PASS[0m (0.00s)
+  test_template_converter_convert                                [32m PASS[0m (0.00s)
+  test_converter_class_exists                                    [32m PASS[0m (0.00s)
+
+TestSlimGenerator
+  test_generates_simple_element                                  [32m PASS[0m (0.00s)
+  test_generates_static_content                                  [32m PASS[0m (0.00s)
+  test_generates_block                                           [32m PASS[0m (0.00s)
+  test_generates_expression                                      [32m PASS[0m (0.00s)
+  test_generates_comment                                         [32m PASS[0m (0.00s)
+  test_generates_nested_elements                                 [32m PASS[0m (0.00s)
+
+TestErbParser
+  test_parses_nested_with_expression                             [32m PASS[0m (0.00s)
+  test_parses_nested                                             [32m PASS[0m (0.00s)
+  test_parses_simple_element                                     [32m PASS[0m (0.00s)
+
+TestCLI
+  test_cli_dry_run                                               [32m PASS[0m (0.01s)
+  test_cli_warnings_as_errors                                    [32m PASS[0m (0.00s)
+  test_cli_handles_conversion_error                              [32m PASS[0m (0.00s)
+  test_cli_version_command                                       [32m PASS[0m (0.00s)
+  test_cli_batch_no_matching_files                               [32m PASS[0m (0.00s)
+  test_cli_with_backup                                           [32m PASS[0m (0.00s)
+  test_cli_convert_command                                       [32m PASS[0m (0.00s)
+  test_cli_batch_conversion                                      [32m PASS[0m (0.00s)
+  test_cli_batch_nonexistent_directory                           [32m PASS[0m (0.00s)
+  test_cli_batch_with_dry_run                                    [32m PASS[0m (0.00s)
+
+TestSlimGeneratorComprehensive
+  test_generates_html_comment                                    [32m PASS[0m (0.00s)
+  test_handles_empty_template                                    [32m PASS[0m (0.00s)
+  test_generates_multiple_children                               [32m PASS[0m (0.00s)
+  test_generates_element_with_multiple_attributes                [32m PASS[0m (0.00s)
+  test_generates_loop                                            [32m PASS[0m (0.00s)
+  test_generates_block_with_children                             [32m PASS[0m (0.00s)
+  test_raises_on_invalid_ir                                      [32m PASS[0m (0.00s)
+  test_generates_deeply_nested                                   [32m PASS[0m (0.00s)
+  test_escapes_quotes_in_attributes                              [32m PASS[0m (0.00s)
+  test_generates_conditional                                     [32m PASS[0m (0.00s)
+  test_generates_slim_comment                                    [32m PASS[0m (0.00s)
+  test_generates_conditional_with_else                           [32m PASS[0m (0.00s)
+
+TestHamlParser
+  test_parses_expression                                         [32m PASS[0m (0.00s)
+  test_parses_comments                                           [32m PASS[0m (0.00s)
+  test_parses_nested                                             [32m PASS[0m (0.00s)
+  test_parses_simple_div                                         [32m PASS[0m (0.00s)
+
+TestSlimParserComprehensive
+  test_parses_nested_elements                                    [32m PASS[0m (0.00s)
+  test_parses_slim_comment                                       [32m PASS[0m (0.00s)
+  test_parses_self_closing_tag                                   [32m PASS[0m (0.00s)
+  test_parses_slim_code                                          [32m PASS[0m (0.00s)
+  test_parses_data_attributes                                    [32m PASS[0m (0.00s)
+  test_parses_slim_output                                        [32m PASS[0m (0.00s)
+  test_parses_multiple_attributes                                [32m PASS[0m (0.00s)
+  test_handles_parse_error                                       [32m PASS[0m (0.00s)
+  test_parses_element_with_attributes                            [32m PASS[0m (0.00s)
+  test_parses_element_with_content                               [32m PASS[0m (0.00s)
+
+TestOptimizer
+  test_optimize_returns_same_ir                                  [32m PASS[0m (0.00s)
+  test_optimize_template                                         [32m PASS[0m (0.00s)
+
+TestGeneratorInjection
+  test_haml_static_content_injection                             [32m PASS[0m (0.00s)
+  test_slim_attribute_correctness                                [32m PASS[0m (0.00s)
+  test_slim_static_content_injection                             [32m PASS[0m (0.00s)
+  test_backslash_escaping_haml                                   [32m PASS[0m (0.00s)
+  test_haml_attribute_correctness                                [32m PASS[0m (0.00s)
+  test_erb_static_content_injection                              [32m PASS[0m (0.00s)
+  test_slim_attribute_injection                                  [32m PASS[0m (0.00s)
+  test_haml_attribute_injection                                  [32m PASS[0m (0.00s)
+
+TestHamlGenerator
+  test_generates_inline_text                                     [32m PASS[0m (0.00s)
+  test_generates_silent_comment                                  [32m PASS[0m (0.00s)
+  test_generates_nested_elements                                 [32m PASS[0m (0.00s)
+  test_generates_self_closing                                    [32m PASS[0m (0.00s)
+  test_generates_block                                           [32m PASS[0m (0.00s)
+  test_generates_unescaped_expression                            [32m PASS[0m (0.00s)
+  test_generates_expression                                      [32m PASS[0m (0.00s)
+  test_escapes_html_in_attributes                                [31m FAIL[0m (0.00s)
+        Expected false to be truthy.
+        /app/test/generators/test_haml_generator.rb:108:in `test_escapes_html_in_attributes'
+
+  test_generates_comment                                         [32m PASS[0m (0.00s)
+  test_generates_simple_element                                  [32m PASS[0m (0.00s)
+  test_generates_element_with_attributes                         [32m PASS[0m (0.00s)
+
+TestConverter
+  test_converter_raises_on_unsupported_format                    [32m PASS[0m (0.00s)
+  test_converter_with_optimization                               [32m PASS[0m (0.00s)
+  test_converter_raises_on_unsupported_target_format             [32m PASS[0m (0.00s)
+  test_converter_slim_to_erb                                     [32m PASS[0m (0.00s)
+  test_converter_erb_to_haml                                     [32m PASS[0m (0.00s)
+  test_converter_with_validation                                 [32m PASS[0m (0.00s)
+  test_converter_phlex_to_erb                                    [32m PASS[0m (0.00s)
+  test_converter_converts_erb_to_slim                            [32m PASS[0m (0.00s)
+  test_converter_erb_to_phlex                                    [32m PASS[0m (0.00s)
+  test_converter_haml_to_erb                                     [32m PASS[0m (0.00s)
+
+TestPhlexParser
+  test_parses_element_with_attributes                            [32m PASS[0m (0.00s)
+  test_parses_expression                                         [32m PASS[0m (0.00s)
+  test_raises_error_without_view_template                        [32m PASS[0m (0.00s)
+  test_parses_nested_elements                                    [32m PASS[0m (0.00s)
+  test_parses_simple_element                                     [32m PASS[0m (0.00s)
+
+TestSlimParser
+  test_parses_simple_div                                         [32m PASS[0m (0.00s)
+  test_parses_static_content                                     [32m PASS[0m (0.00s)
+  test_parses_expression                                         [32m PASS[0m (0.00s)
+  test_parses_fixture_nested                                     [32m PASS[0m (0.00s)
+  test_parses_fixture                                            [32m PASS[0m (0.00s)
+  test_parses_nested_elements                                    [32m PASS[0m (0.00s)
+
+TestPhlexGenerator
+  test_generates_nested_elements                                 [32m PASS[0m (0.00s)
+  test_generates_static_content                                  [32m PASS[0m (0.00s)
+  test_generates_self_closing_element                            [32m PASS[0m (0.00s)
+  test_generates_simple_element                                  [32m PASS[0m (0.00s)
+  test_generates_conditional                                     [32m PASS[0m (0.00s)
+  test_generates_unescaped_expression                            [32m PASS[0m (0.00s)
+  test_generates_loop                                            [32m PASS[0m (0.00s)
+  test_generates_comment                                         [32m PASS[0m (0.00s)
+  test_generates_element_with_attributes                         [32m PASS[0m (0.00s)
+  test_generates_expression                                      [32m PASS[0m (0.00s)
+
+TestHamlParserComprehensive
+  test_parses_element_with_hash_attributes                       [32m PASS[0m (0.00s)
+  test_parses_self_closing_tag                                   [32m PASS[0m (0.00s)
+  test_parses_haml_code                                          [32m PASS[0m (0.00s)
+  test_parses_haml_comment                                       [32m PASS[0m (0.00s)
+  test_parses_plain_text                                         [32m PASS[0m (0.00s)
+  test_parses_haml_output                                        [32m PASS[0m (0.00s)
+  test_parses_multiple_classes                                   [32m PASS[0m (0.00s)
+  test_parses_unescaped_output                                   [32m PASS[0m (0.00s)
+  test_parses_nested_elements                                    [32m PASS[0m (0.00s)
+  test_parses_class_shortcut                                     [32m PASS[0m (0.00s)
+  test_parses_each_loop                                          [32m PASS[0m (0.00s)
+  test_parses_element_with_content                               [32m PASS[0m (0.00s)
+  test_handles_parse_error                                       [32m PASS[0m (0.00s)
+  test_parses_combined_shortcuts                                 [32m PASS[0m (0.00s)
+  test_parses_id_shortcut                                        [32m PASS[0m (0.00s)
+  test_skips_empty_lines                                         [32m PASS[0m (0.00s)
+  test_parses_silent_comment                                     [32m PASS[0m (0.00s)
+
+TestErbGenerator
+  test_generates_conditional_with_else                           [32m PASS[0m (0.00s)
+  test_generates_simple_element                                  [32m PASS[0m (0.00s)
+  test_generates_element_with_attributes                         [32m PASS[0m (0.00s)
+  test_generates_self_closing_element                            [32m PASS[0m (0.00s)
+  test_generates_erb_comment                                     [32m PASS[0m (0.00s)
+  test_generates_static_content                                  [32m PASS[0m (0.00s)
+  test_generates_expression                                      [32m PASS[0m (0.00s)
+  test_generates_nested_elements                                 [32m PASS[0m (0.00s)
+  test_generates_block                                           [32m PASS[0m (0.00s)
+  test_generates_unescaped_expression                            [32m PASS[0m (0.00s)
+  test_generates_conditional                                     [32m PASS[0m (0.00s)
+  test_escapes_html_in_attributes                                [32m PASS[0m (0.00s)
+  test_generates_comment                                         [32m PASS[0m (0.00s)
+  test_generates_loop                                            [32m PASS[0m (0.00s)
+  test_generates_complex_nested_structure                        [32m PASS[0m (0.00s)
+
+TestCliFileExtensions
+  test_determine_output_filename_phlex_to_haml                   [32m PASS[0m (0.00s)
+  test_determine_output_filename_slim_to_phlex                   [32m PASS[0m (0.00s)
+  test_determine_output_filename_phlex_without_html_prefix       [32m PASS[0m (0.00s)
+  test_determine_output_filename_phlex_to_erb                    [32m PASS[0m (0.00s)
+  test_determine_output_filename_phlex_to_slim                   [32m PASS[0m (0.00s)
+  test_determine_output_filename_erb_to_phlex                    [32m PASS[0m (0.00s)
+  test_determine_output_filename_without_html_prefix             [32m PASS[0m (0.00s)
+  test_determine_output_filename_haml_to_phlex                   [32m PASS[0m (0.00s)
+  test_determine_output_filename_erb_to_haml                     [32m PASS[0m (0.00s)
+  test_determine_output_filename_erb_to_slim                     [32m PASS[0m (0.00s)
+  test_determine_output_filename_slim_to_haml                    [32m PASS[0m (0.00s)
+  test_determine_output_filename_haml_to_erb                     [32m PASS[0m (0.00s)
+
+TestErbParserComprehensive
+  test_parses_img_element                                        [32m PASS[0m (0.00s)
+  test_parses_unescaped_output                                   [32m PASS[0m (0.00s)
+  test_parses_multiple_elements                                  [32m PASS[0m (0.00s)
+  test_parses_self_closing_element                               [32m PASS[0m (0.00s)
+  test_parses_deeply_nested                                      [32m PASS[0m (0.00s)
+  test_warns_on_unknown_node_type                                [32m PASS[0m (0.00s)
+  test_parses_erb_comment                                        [32m PASS[0m (0.00s)
+  test_parses_data_attributes                                    [32m PASS[0m (0.00s)
+  test_parses_element_with_attributes                            [32m PASS[0m (0.00s)
+  test_parses_without_errors                                     [32m PASS[0m (0.00s)
+  test_parses_erb_code_block                                     [32m PASS[0m (0.00s)
+
+Finished in 0.08211s
+258 tests, 547 assertions, [31m1 failures, 0 errors, [0m[33m0 skips[0m
+rake aborted!
+Command failed with status (1): [ruby -I"lib:test:lib" /app/vendor/bundle/ruby/3.2.0/gems/rake-13.3.1/lib/rake/rake_test_loader.rb "test/generators/test_erb_generator.rb" "test/generators/test_haml_generator.rb" "test/generators/test_phlex_generator.rb" "test/generators/test_slim_generator.rb" "test/generators/test_slim_generator_comprehensive.rb" "test/integration/test_attributes.rb" "test/integration/test_cli.rb" "test/integration/test_cli_file_extensions.rb" "test/integration/test_conversions.rb" "test/ir/test_nodes.rb" "test/ir/test_visitor.rb" "test/parsers/test_erb_parser.rb" "test/parsers/test_erb_parser_comprehensive.rb" "test/parsers/test_haml_parser.rb" "test/parsers/test_haml_parser_comprehensive.rb" "test/parsers/test_phlex_parser.rb" "test/parsers/test_phlex_parser_comprehensive.rb" "test/parsers/test_slim_parser.rb" "test/parsers/test_slim_parser_comprehensive.rb" "test/security/test_generator_injection.rb" "test/security/test_phlex_injection.rb" "test/test_any2any.rb" "test/test_converter.rb" "test/test_errors.rb" "test/test_helper.rb" "test/transformers/test_normalizer.rb" "test/transformers/test_optimizer.rb" "test/transformers/test_validator.rb" -v]
+/app/vendor/bundle/ruby/3.2.0/gems/rake-13.3.1/exe/rake:27:in `<top (required)>'
+Tasks: TOP => test
+(See full trace by running task with --trace)

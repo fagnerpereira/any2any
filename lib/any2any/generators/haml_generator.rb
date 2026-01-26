@@ -54,7 +54,7 @@ module Any2Any
         if element.attributes.any?
           attrs = element.attributes.map do |key, value|
             # Use symbol keys for HAML
-            "#{key}: \"#{escape_attribute(value.to_s)}\""
+            "#{key}: \"#{escape_ruby_string(value.to_s)}\""
           end.join(", ")
           output << "{#{attrs}}"
         end
@@ -161,7 +161,7 @@ module Any2Any
 
         output = String.new
         output << current_indent
-        output << content.text
+        output << escape_interpolation(content.text)
         output
       end
 

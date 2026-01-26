@@ -53,7 +53,7 @@ module Any2Any
 
         # Generate attributes using HTML-style syntax: class="value"
         if element.attributes.any?
-          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(value.to_s)}\"" }.join(" ")
+          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_ruby_string(value.to_s)}\"" }.join(" ")
           output << " #{attributes_str}"
         end
 
@@ -153,7 +153,7 @@ module Any2Any
 
         output = String.new
         output << current_indent
-        output << "| #{content.text}"
+        output << "| #{escape_interpolation(content.text)}"
         output
       end
 
