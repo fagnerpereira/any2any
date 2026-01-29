@@ -61,6 +61,22 @@ module Any2Any
           .gsub('"', "&quot;")
           .gsub("'", "&#39;")
       end
+
+      # Escape Ruby interpolation #{...} -> \#{...}
+      def escape_ruby_interpolation(value)
+        return value unless value.is_a?(String)
+        # Replacing #{ with \#{ disables interpolation in HAML/Slim
+        # Since \ escapes the #, it effectively treats the sequence as text.
+        # This also works correctly if the string already contains backslashes
+        # (e.g. \#{foo} -> \\#{foo} which renders as \#{foo})
+        value.gsub('#{', '\#{')
+      end
+
+      # Escape ERB tags <% -> <%%
+      def escape_erb_tags(value)
+        return value unless value.is_a?(String)
+        value.gsub('<%', '<%%')
+      end
     end
   end
 end

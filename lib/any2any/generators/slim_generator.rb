@@ -53,7 +53,11 @@ module Any2Any
 
         # Generate attributes using HTML-style syntax: class="value"
         if element.attributes.any?
-          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(value.to_s)}\"" }.join(" ")
+          attributes_str = element.attributes.map do |key, value|
+            val = escape_attribute(value.to_s)
+            val = escape_ruby_interpolation(val)
+            "#{key}=\"#{val}\""
+          end.join(" ")
           output << " #{attributes_str}"
         end
 
@@ -152,8 +156,30 @@ module Any2Any
         return "" if content.text.strip.empty?
 
         output = String.new
-        output << current_indent
-        output << "| #{content.text}"
+
+        # Split into lines to handle multiline content safely using | prefix for each line
+        lines = content.text.split("\n", -1)
+        lines.each_with_index do |line, index|
+          # Skip the first newline if the text started with one? No, split handles it.
+          # If we have "line1\nline2", we want:
+          #   | line1
+          #   | line2
+
+          if index > 0
+            output << "\n"
+          end
+
+          # Only output indentation and pipe if the line is not empty or it's a significant empty line
+          # For Slim, empty lines are just empty lines. But if we want to preserve text structure:
+          if line.empty?
+             # Just a newline
+          else
+            output << current_indent
+            output << "| "
+            output << escape_ruby_interpolation(line)
+          end
+        end
+
         output
       end
 

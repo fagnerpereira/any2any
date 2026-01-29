@@ -54,7 +54,9 @@ module Any2Any
         if element.attributes.any?
           attrs = element.attributes.map do |key, value|
             # Use symbol keys for HAML
-            "#{key}: \"#{escape_attribute(value.to_s)}\""
+            val = escape_attribute(value.to_s)
+            val = escape_ruby_interpolation(val)
+            "#{key}: \"#{val}\""
           end.join(", ")
           output << "{#{attrs}}"
         end
@@ -65,9 +67,15 @@ module Any2Any
         end
 
         # Handle inline text content
-        if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
-          output << " #{element.children.first.text.strip}"
-          return output
+        # Optimization: if single static text child and no newlines, print inline
+        if element.children.length == 1 &&
+           element.children.first.is_a?(IR::StaticContent)
+
+          text = element.children.first.text.strip
+          unless text.include?("\n")
+            output << " #{escape_ruby_interpolation(text)}"
+            return output
+          end
         end
 
         # Generate children
@@ -160,8 +168,34 @@ module Any2Any
         return "" if content.text.strip.empty?
 
         output = String.new
-        output << current_indent
-        output << content.text
+        lines = content.text.split("\n", -1)
+
+        lines.each_with_index do |line, index|
+          # Skip empty lines if we want compact output, but usually preserve structure?
+          # If we have "line1\n\nline2", we want that empty line.
+          # But indentation on empty line is useless.
+
+          if index > 0
+            output << "\n"
+          end
+
+          unless line.strip.empty?
+            output << current_indent
+
+            # Escape Ruby interpolation
+            escaped_line = escape_ruby_interpolation(line)
+
+            # HAML escaping for start of line
+            # If line starts with special char, escape with \
+            # Note: \#{ is valid at start of line (escapes interpolation), so don't double escape it
+            if escaped_line =~ /^[%#=\-~\/\.!:&]/ || (escaped_line.start_with?('\\') && !escaped_line.start_with?('\#{'))
+               output << "\\"
+            end
+
+            output << escaped_line
+          end
+        end
+
         output
       end
 
