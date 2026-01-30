@@ -66,7 +66,7 @@ module Any2Any
 
         # Handle inline text content
         if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
-          output << " #{element.children.first.text.strip}"
+          output << " #{escape_ruby_interpolation(element.children.first.text.strip)}"
           return output
         end
 
@@ -161,7 +161,7 @@ module Any2Any
 
         output = String.new
         output << current_indent
-        output << content.text
+        output << escape_ruby_interpolation(content.text)
         output
       end
 

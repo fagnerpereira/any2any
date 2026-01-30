@@ -61,6 +61,21 @@ module Any2Any
           .gsub('"', "&quot;")
           .gsub("'", "&#39;")
       end
+
+      # Escape ERB tags in text content
+      def escape_erb_tags(text)
+        return text unless text.is_a?(String)
+        text.gsub("<%", "<%%")
+      end
+
+      # Escape Ruby interpolation in text content
+      def escape_ruby_interpolation(text)
+        return text unless text.is_a?(String)
+        # First escape backslashes to avoid ambiguity
+        # Then escape interpolation start
+        text.gsub("\\") { "\\\\" }
+            .gsub('#{') { '\#{' }
+      end
     end
   end
 end
