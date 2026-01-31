@@ -105,6 +105,8 @@ class TestHamlGenerator < Minitest::Test
     ir = Any2Any::IR::Template.new(children: [element])
 
     output = @generator.generate(ir)
-    assert output.include?("&lt;script&gt;")
+    # HAML handles HTML escaping of attributes automatically.
+    # We should output the raw string as a Ruby string literal.
+    assert output.include?('"<script>"')
   end
 end

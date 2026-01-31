@@ -61,6 +61,36 @@ module Any2Any
           .gsub('"', "&quot;")
           .gsub("'", "&#39;")
       end
+
+      # Safely generate a Ruby string literal (e.g. for attributes)
+      # Escapes quote marks and ensures interpolation sequences are neutralized
+      def ruby_string_literal(text)
+        return '""' unless text.is_a?(String)
+
+        # Use inspect to get a valid Ruby string literal
+        literal = text.inspect
+
+        # inspect does NOT escape interpolation sequences like #{...}
+        # because they are valid in Ruby string literals (interpolated at runtime).
+        # But we are generating code that will be parsed again by the template engine.
+        # So we must escape #{ to \#{ to prevent execution.
+        literal.gsub('#{', '\#{')
+      end
+
+      # Escape content that might be interpolated by the template engine (HAML/Slim text)
+      def escape_to_interpolation(text)
+        return text unless text.is_a?(String)
+
+        # Escape backslashes first (to avoid escaping the backslash we add later)
+        # Then escape interpolation start sequence
+        text.gsub('\\', '\\\\').gsub('#{', '\#{')
+      end
+
+      # Escape ERB tags to prevent SSTI
+      def escape_erb_tags(text)
+        return text unless text.is_a?(String)
+        text.gsub('<%', '<%%')
+      end
     end
   end
 end

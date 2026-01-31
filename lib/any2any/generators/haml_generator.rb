@@ -54,7 +54,7 @@ module Any2Any
         if element.attributes.any?
           attrs = element.attributes.map do |key, value|
             # Use symbol keys for HAML
-            "#{key}: \"#{escape_attribute(value.to_s)}\""
+            "#{key}: #{ruby_string_literal(value.to_s)}"
           end.join(", ")
           output << "{#{attrs}}"
         end
@@ -66,7 +66,7 @@ module Any2Any
 
         # Handle inline text content
         if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
-          output << " #{element.children.first.text.strip}"
+          output << " #{escape_to_interpolation(element.children.first.text.strip)}"
           return output
         end
 
@@ -160,8 +160,33 @@ module Any2Any
         return "" if content.text.strip.empty?
 
         output = String.new
-        output << current_indent
-        output << content.text
+
+        content.text.each_line.with_index do |line, index|
+          # Preserve empty lines as newlines but don't indent them
+          if line.strip.empty?
+            output << "\n"
+            next
+          end
+
+          output << current_indent
+
+          # Escape interpolation
+          escaped = escape_to_interpolation(line.chomp)
+
+          # Check for HAML special characters at start of line (ignoring indentation)
+          # Special chars: % # = - ~ / . ! : &
+          # Note: escape_to_interpolation handles \.
+          stripped = escaped.lstrip
+          if stripped =~ /^[%#=\-~\/\.!:&]/
+             # Insert backslash before the special character
+             first_char_idx = escaped.index(/[^ \t]/)
+             escaped.insert(first_char_idx, "\\") if first_char_idx
+          end
+
+          output << escaped
+          output << "\n" unless index == content.text.lines.count - 1 && !content.text.end_with?("\n")
+        end
+
         output
       end
 

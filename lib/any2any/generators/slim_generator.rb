@@ -53,7 +53,7 @@ module Any2Any
 
         # Generate attributes using HTML-style syntax: class="value"
         if element.attributes.any?
-          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(value.to_s)}\"" }.join(" ")
+          attributes_str = element.attributes.map { |key, value| "#{key}=#{ruby_string_literal(value.to_s)}" }.join(" ")
           output << " #{attributes_str}"
         end
 
@@ -64,7 +64,7 @@ module Any2Any
 
         # Handle inline text content
         if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
-          output << " #{element.children.first.text.strip}"
+          output << " #{escape_to_interpolation(element.children.first.text.strip)}"
           return output
         end
 
@@ -152,8 +152,27 @@ module Any2Any
         return "" if content.text.strip.empty?
 
         output = String.new
-        output << current_indent
-        output << "| #{content.text}"
+        lines = content.text.lines
+
+        # Handle first line
+        if lines.any?
+          output << current_indent
+          output << "| #{escape_to_interpolation(lines.first.chomp)}"
+          output << "\n" if lines.size > 1 || content.text.end_with?("\n")
+        end
+
+        # Handle subsequent lines
+        lines[1..].each_with_index do |line, index|
+          if line.strip.empty?
+            output << "\n"
+            next
+          end
+
+          output << current_indent
+          output << "  #{escape_to_interpolation(line.chomp)}"
+          output << "\n" unless index == lines.size - 2 && !content.text.end_with?("\n")
+        end
+
         output
       end
 
