@@ -61,6 +61,12 @@ module Any2Any
           .gsub('"', "&quot;")
           .gsub("'", "&#39;")
       end
+
+      # ERB tag escaping (prevents injection)
+      def escape_erb_tags(content)
+        return content unless content.is_a?(String)
+        content.gsub("<%", "<%%")
+      end
     end
   end
 end

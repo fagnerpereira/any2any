@@ -116,7 +116,7 @@ module Any2Any
       end
 
       def generate_static_content(content)
-        content.text
+        escape_erb_tags(content.text)
       end
 
       def generate_comment(comment)
