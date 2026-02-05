@@ -66,8 +66,12 @@ module Any2Any
 
         # Handle inline text content
         if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
-          output << " #{element.children.first.text.strip}"
-          return output
+          text = element.children.first.text.strip
+          # Inline content must not be multiline
+          if !text.empty? && !text.include?("\n")
+            output << " #{text}"
+            return output
+          end
         end
 
         # Generate children
@@ -156,12 +160,41 @@ module Any2Any
       end
 
       def generate_static_content(content)
-        # Skip whitespace-only content
         return "" if content.text.strip.empty?
 
+        lines = content.text.lines
         output = String.new
-        output << current_indent
-        output << content.text
+
+        lines.each_with_index do |line, index|
+          # Strip trailing whitespace (including newline)
+          stripped = line.rstrip
+
+          if stripped.empty?
+            # Preserve empty lines as just newlines
+            output << "\n"
+            next
+          end
+
+          output << "\n" if index > 0
+          output << current_indent
+
+          # We need to escape special characters at the start of the line.
+          # We search for the first non-whitespace character.
+          if match = stripped.match(/^(\s*)([^\s].*)/)
+            indentation = match[1]
+            rest = match[2]
+
+            # HAML special characters that need escaping at start of line
+            if rest.start_with?('-', '=', '%', '#', '.', '!', '/', '~', ':', '\\', '&')
+              output << indentation << "\\" << rest
+            else
+              output << stripped
+            end
+          else
+            # Should be covered by stripped.empty? check, but just in case
+            output << stripped
+          end
+        end
         output
       end
 
