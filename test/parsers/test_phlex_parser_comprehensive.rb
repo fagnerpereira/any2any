@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestPhlexParserComprehensive < Minitest::Test
   def setup
@@ -15,7 +15,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     assert_instance_of Any2Any::IR::Template, ir
     assert ir.children.length > 0
@@ -29,10 +29,10 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     element = ir.children.first
-    assert_equal 'div', element.tag_name
+    assert_equal "div", element.tag_name
   end
 
   def test_parses_component_with_attributes
@@ -43,11 +43,11 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     element = ir.children.first
-    assert_equal 'container', element.attributes['class']
-    assert_equal 'main', element.attributes['id']
+    assert_equal "container", element.attributes["class"]
+    assert_equal "main", element.attributes["id"]
   end
 
   def test_parses_nested_elements
@@ -60,10 +60,10 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     div = ir.children.first
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
     assert_equal 1, div.children.length
   end
 
@@ -75,7 +75,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     content = ir.children.first
     assert_instance_of Any2Any::IR::StaticContent, content
@@ -89,7 +89,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     # whitespace may or may not create a node
     if ir.children.any?
@@ -108,7 +108,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     comment = ir.children.first
     assert_instance_of Any2Any::IR::Comment, comment
@@ -122,7 +122,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     # unsafe_raw may or may not be fully supported yet
     if ir.children.any?
@@ -142,7 +142,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     # render may or may not create a node
     if ir.children.any?
@@ -161,7 +161,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     assert_raises(Any2Any::ParseError) do
       @parser.parse(source)
     end
@@ -169,7 +169,7 @@ class TestPhlexParserComprehensive < Minitest::Test
 
   def test_handles_invalid_ruby
     assert_raises(Any2Any::ParseError) do
-      @parser.parse('invalid ruby code {{{')
+      @parser.parse("invalid ruby code {{{")
     end
   end
 
@@ -182,7 +182,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     assert_equal 2, ir.children.length
   end
@@ -197,7 +197,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     assert ir.children.length > 0
   end
@@ -212,7 +212,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     assert ir.children.length > 0
   end
@@ -225,10 +225,10 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     element = ir.children.first
-    assert_equal 'div', element.tag_name
+    assert_equal "div", element.tag_name
   end
 
   def test_parses_self_closing_tags
@@ -240,7 +240,7 @@ class TestPhlexParserComprehensive < Minitest::Test
         end
       end
     RUBY
-    
+
     ir = @parser.parse(source)
     assert_equal 2, ir.children.length
     assert_equal true, ir.children.first.self_closing

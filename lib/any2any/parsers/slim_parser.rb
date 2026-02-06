@@ -1,20 +1,18 @@
 # frozen_string_literal: true
 
-require 'slim'
-require 'temple'
+require "slim"
+require "temple"
 
 module Any2Any
   module Parsers
     # Slim to IR parser using Temple
     class SlimParser < BaseParser
       def parse(source)
-        begin
-          parser = Slim::Parser.new
-          sexp = parser.call(source)
-          transform_sexp_to_ir(sexp)
-        rescue => e
-          raise ParseError, "Failed to parse Slim: #{e.message}"
-        end
+        parser = Slim::Parser.new
+        sexp = parser.call(source)
+        transform_sexp_to_ir(sexp)
+      rescue => e
+        raise ParseError, "Failed to parse Slim: #{e.message}"
       end
 
       private
@@ -76,8 +74,6 @@ module Any2Any
         when :output
           # Dynamic output
           IR::Expression.new(code: sexp[3].to_s, escaped: sexp[2])
-        else
-          nil
         end
       end
 
@@ -193,7 +189,7 @@ module Any2Any
 
         attrs_array.compact.each do |attr|
           next unless attr.is_a?(Array)
-          
+
           # Slim attributes are: [:html, :attr, "key", value_sexp]
           if attr[0] == :html && attr[1] == :attr
             attr_key = attr[2].to_s

@@ -55,7 +55,7 @@ module Any2Any
           attrs = element.attributes.map do |key, value|
             # Use symbol keys for HAML
             "#{key}: \"#{escape_attribute(value.to_s)}\""
-          end.join(', ')
+          end.join(", ")
           output << "{#{attrs}}"
         end
 
@@ -88,10 +88,10 @@ module Any2Any
         output = String.new
         output << current_indent
 
-        if expr.escaped
-          output << "= #{expr.code}"
+        output << if expr.escaped
+          "= #{expr.code}"
         else
-          output << "!= #{expr.code}"
+          "!= #{expr.code}"
         end
 
         output
@@ -158,7 +158,7 @@ module Any2Any
       def generate_static_content(content)
         # Skip whitespace-only content
         return "" if content.text.strip.empty?
-        
+
         output = String.new
         output << current_indent
         output << content.text
@@ -169,10 +169,10 @@ module Any2Any
         output = String.new
         output << current_indent
 
-        if comment.html_visible
-          output << "/ #{comment.text}"
+        output << if comment.html_visible
+          "/ #{comment.text}"
         else
-          output << "-# #{comment.text}"
+          "-# #{comment.text}"
         end
 
         output

@@ -182,11 +182,11 @@ module Any2Any
         visitor = proc do |node|
           case node
           when IR::Expression
-            has_ivars = true if node.code.include?('@')
+            has_ivars = true if node.code.include?("@")
           when IR::Conditional
-            has_ivars = true if node.condition.include?('@')
+            has_ivars = true if node.condition.include?("@")
           when IR::Loop
-            has_ivars = true if node.collection.include?('@')
+            has_ivars = true if node.collection.include?("@")
           when IR::Element, IR::Template
             node.children.each(&visitor) if node.respond_to?(:children)
           when IR::Block

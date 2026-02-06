@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 
-require 'minitest/autorun'
-require 'minitest/reporters'
-require 'simplecov'
+require "minitest/autorun"
+require "minitest/reporters"
+require "simplecov"
 
 # Setup coverage
 SimpleCov.start do
-  add_filter '/test/'
+  add_filter "/test/"
 end
 
 # Setup test reporters
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
 # Load the gem
-require 'any2any'
+require "any2any"
 
 class Minitest::Test
   def fixtures_dir
-    File.expand_path('fixtures', __dir__)
+    File.expand_path("fixtures", __dir__)
   end
 
   def fixture_path(format, name)

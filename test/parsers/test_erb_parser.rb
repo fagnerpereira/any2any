@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestErbParser < Minitest::Test
   def setup
@@ -16,7 +16,7 @@ class TestErbParser < Minitest::Test
 
     div = ir.children.first
     assert_instance_of Any2Any::IR::Element, div
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
     assert_empty div.children
   end
 
@@ -26,13 +26,13 @@ class TestErbParser < Minitest::Test
 
     assert_instance_of Any2Any::IR::Template, ir
     div = ir.children.first
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
     p_tag = div.children.first
-    assert_equal 'p', p_tag.tag_name
+    assert_equal "p", p_tag.tag_name
 
     expr = p_tag.children.first
     assert_instance_of Any2Any::IR::Expression, expr
-    assert_equal '@name', expr.code
+    assert_equal "@name", expr.code
     assert_equal true, expr.escaped
   end
 
@@ -41,8 +41,8 @@ class TestErbParser < Minitest::Test
     ir = @parser.parse(source)
 
     div = ir.children.first
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
     p_tag = div.children.first
-    assert_equal 'p', p_tag.tag_name
+    assert_equal "p", p_tag.tag_name
   end
 end

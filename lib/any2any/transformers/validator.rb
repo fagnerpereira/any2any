@@ -12,7 +12,7 @@ module Any2Any
       def validate!(node)
         @errors.clear
         visit(node)
-        raise ValidationError, "Validation failed: #{@errors.join(', ')}" if @errors.any?
+        raise ValidationError, "Validation failed: #{@errors.join(", ")}" if @errors.any?
       end
 
       def transform(node)

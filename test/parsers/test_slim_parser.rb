@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestSlimParser < Minitest::Test
   def setup
@@ -8,13 +8,13 @@ class TestSlimParser < Minitest::Test
   end
 
   def test_parses_simple_div
-    source = 'div'
+    source = "div"
     ir = @parser.parse(source)
 
     assert_instance_of Any2Any::IR::Template, ir
     assert_equal 1, ir.children.length
     assert_instance_of Any2Any::IR::Element, ir.children.first
-    assert_equal 'div', ir.children.first.tag_name
+    assert_equal "div", ir.children.first.tag_name
   end
 
   def test_parses_nested_elements
@@ -22,12 +22,12 @@ class TestSlimParser < Minitest::Test
     ir = @parser.parse(source)
 
     div = ir.children.first
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
     assert_equal 1, div.children.length
 
     p_tag = div.children.first
     assert_instance_of Any2Any::IR::Element, p_tag
-    assert_equal 'p', p_tag.tag_name
+    assert_equal "p", p_tag.tag_name
   end
 
   def test_parses_static_content
@@ -38,7 +38,7 @@ class TestSlimParser < Minitest::Test
     assert_equal 1, div.children.length
     content = div.children.first
     assert_instance_of Any2Any::IR::StaticContent, content
-    assert_equal 'Hello World', content.text
+    assert_equal "Hello World", content.text
   end
 
   def test_parses_expression
@@ -46,12 +46,12 @@ class TestSlimParser < Minitest::Test
     ir = @parser.parse(source)
 
     p_tag = ir.children.first
-    assert_equal 'p', p_tag.tag_name
+    assert_equal "p", p_tag.tag_name
     assert_equal 1, p_tag.children.length
 
     expr = p_tag.children.first
     assert_instance_of Any2Any::IR::Expression, expr
-    assert_equal '@name', expr.code
+    assert_equal "@name", expr.code
     assert_equal true, expr.escaped
   end
 
@@ -61,7 +61,7 @@ class TestSlimParser < Minitest::Test
 
     assert_instance_of Any2Any::IR::Template, ir
     assert_equal 1, ir.children.length
-    assert_equal 'div', ir.children.first.tag_name
+    assert_equal "div", ir.children.first.tag_name
   end
 
   def test_parses_fixture_nested
@@ -69,8 +69,8 @@ class TestSlimParser < Minitest::Test
     ir = @parser.parse(source)
 
     div = ir.children.first
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
     assert_equal 1, div.children.length
-    assert_equal 'p', div.children.first.tag_name
+    assert_equal "p", div.children.first.tag_name
   end
 end
