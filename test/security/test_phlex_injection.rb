@@ -14,7 +14,7 @@ class TestPhlexInjection < Minitest::Test
     output = result[:output]
 
     # Generated code should be: plain "Hello \#{system...}"
-    # This prevents interpolation because \# in double quotes is just #.
+    # This prevents interpolation because \# in double quotes escapes the hash and produces literal # without interpolation.
     # Assertion string: plain "Hello \\#{system...}"
 
     assert_includes output, 'plain "Hello \\#{system(\'echo injected\')}"'
