@@ -159,8 +159,11 @@ module Any2Any
       end
 
       def generate_static_content(content)
-        # Skip whitespace-only content
-        return "" if content.text.strip.empty?
+        # Skip whitespace-only content if it's just a single line or empty
+        # But we need to be careful not to skip significant whitespace if needed
+        # For now, stick to original behavior but handle lines
+        text = content.text
+        return "" if text.strip.empty?
 
         lines = content.text.lines
         output = String.new
