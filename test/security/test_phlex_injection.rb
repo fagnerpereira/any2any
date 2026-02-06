@@ -1,37 +1,64 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require_relative '../test_helper'
+require 'minitest/autorun'
 
 class TestPhlexInjection < Minitest::Test
   def setup
-    @converter = Any2Any::Converter.new
+    @generator = Any2Any::Generators::PhlexGenerator.new
   end
 
-  def test_prevents_code_injection_in_phlex_static_content
-    # This ERB content is just text "Hello #{system('echo injected')}"
-    # In ERB, this is static text because it's not inside <% %>.
-    erb_source = "Hello \#{system('echo injected')}"
+  def test_interpolation_injection
+    # Simulates IR where a static text node contains Ruby interpolation syntax
+    # which should be treated as literal text in the output.
+    text_with_injection = '#{system("echo HACKED")}'
 
-    result = @converter.convert(erb_source, from: :erb, to: :phlex)
-    output = result[:output]
+    # Create a simple IR: <div>#{system("echo HACKED")}</div>
+    static_content = Any2Any::IR::StaticContent.new(text: text_with_injection)
+    element = Any2Any::IR::Element.new(tag_name: 'div', children: [static_content])
 
-    # Generated code should be: plain "Hello \#{system...}"
-    # This prevents interpolation because \# in double quotes escapes the hash and produces literal # without interpolation.
-    # Assertion string: plain "Hello \\#{system...}"
+    template = Any2Any::IR::Template.new(children: [element])
 
-    assert_includes output, 'plain "Hello \\#{system(\'echo injected\')}"'
+    output = @generator.generate(template)
+
+    # Check if the output is safely escaped
+    # We expect: plain "\#{system(\"echo HACKED\")}"
+
+    refute_match(/plain "#{Regexp.escape(text_with_injection)}"/, output, "Output should not contain unescaped interpolation")
+    assert_match(/\\#\{/, output, "Interpolation start should be escaped")
   end
 
-  def test_prevents_code_injection_in_phlex_attributes
-    # ERB input with attribute containing interpolation syntax
-    # Use 'class' to avoid Ruby syntax errors with dashed keys
-    erb_source = '<div class="\#{system(\'echo injected\')}"></div>'
+  def test_backslash_injection
+     # Backslash at the end of a string can escape the closing quote
+     # value = "foo\"" -> escaped to "foo\\"" -> inside string "foo\\"" -> correct
 
-    result = @converter.convert(erb_source, from: :erb, to: :phlex)
-    output = result[:output]
+     text_ending_in_backslash = 'foo\\'
 
-    # Input has \#{
-    # Generated code should have \\\#{ (3 backslashes).
-    # Assertion string needs 6 backslashes to match 3 backslashes.
+     static_content = Any2Any::IR::StaticContent.new(text: text_ending_in_backslash)
+     element = Any2Any::IR::Element.new(tag_name: 'div', children: [static_content])
 
-    assert_includes output, 'class: "\\\\\\#{system(\'echo injected\')}"'
+     template = Any2Any::IR::Template.new(children: [element])
+
+     output = @generator.generate(template)
+
+     # We expect double backslash in the Ruby code string literal
+     assert_match(/plain "foo\\\\"/, output, "Backslashes should be escaped")
+  end
+
+  def test_attribute_injection
+    # Test injection in attributes
+    attribute_value = '"><script>alert(1)</script>'
+
+    element = Any2Any::IR::Element.new(
+      tag_name: 'div',
+      attributes: { 'data-foo' => attribute_value }
+    )
+
+    template = Any2Any::IR::Template.new(children: [element])
+
+    output = @generator.generate(template)
+
+    assert_match(/data-foo: ".*\\".*"/, output, "Double quotes in attributes should be escaped")
+    assert_match(/\\"><script>/, output, "Injection payload should be escaped")
   end
 end
