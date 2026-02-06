@@ -64,8 +64,14 @@ module Any2Any
           return output
         end
 
-        # Handle inline text content
-        if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
+        # Handle inline text content only if it's single line
+        if element.children.length == 1 &&
+           element.children.first.is_a?(IR::StaticContent) &&
+           !element.children.first.text.include?("\n")
+
+          # HAML handles inline text safely if it's on the same line after the tag
+          # e.g. %div %content -> <div>%content</div>
+          # But we should trim it
           output << " #{element.children.first.text.strip}"
           return output
         end
@@ -156,12 +162,35 @@ module Any2Any
       end
 
       def generate_static_content(content)
-        # Skip whitespace-only content
-        return "" if content.text.strip.empty?
+        # Skip whitespace-only content if it's just a single line or empty
+        # But we need to be careful not to skip significant whitespace if needed
+        # For now, stick to original behavior but handle lines
+        text = content.text
+        return "" if text.strip.empty?
 
         output = String.new
-        output << current_indent
-        output << content.text
+        lines = text.lines
+
+        lines.each_with_index do |line, index|
+          line_content = line.chomp
+
+          if line_content.strip.empty?
+             # Preserve empty lines
+             output << "\n" unless index == lines.size - 1
+             next
+          end
+
+          output << current_indent
+
+          # Escape lines starting with HAML special characters
+          if line_content.lstrip.match?(/^[%#=\-\/\.!]/)
+            output << "\\"
+          end
+
+          output << line_content
+          output << "\n" unless index == lines.size - 1
+        end
+
         output
       end
 
