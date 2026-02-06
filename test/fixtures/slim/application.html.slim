@@ -1,0 +1,21 @@
+doctype html
+html lang="en" class="bg-base-200"
+  head
+    title Acme Books
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type"
+    meta content="width=device-width,initial-scale=1" name="viewport"
+    meta name="mobile-web-app-capable" content="yes"
+
+    = csrf_meta_tags
+    = csp_meta_tag
+
+    = yield :head
+    / = Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!)
+    / = tag.link rel: "manifest", href: pwa_manifest_path(format: :json)
+
+    = stylesheet_link_tag "application", "data-turbo-track": "reload"
+    = javascript_include_tag "application", "data-turbo-track": "reload", type: "module"
+
+    body class="bg-yellow-50 bg-[radial-gradient(#fbbf24_2px,transparent_2px)] text-black antialiased"
+      main class="min-h-screen flex items-center justify-center p-4 bg-yellow-50 bg-[radial-gradient(#fbbf24_2px,transparent_2px)] bg-size-[32px_32px]"
+        = yield

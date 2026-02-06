@@ -6,11 +6,21 @@ module Any2Any
   module Parsers
     # Phlex to IR parser using Ruby Parser gem
     class PhlexParser < BaseParser
+      def parser_for_current_ruby
+        if Gem::Version.new(RUBY_VERSION) <= "3.3"
+          require "parser/current"
+          Parser::CurrentRuby
+        else
+          require "prism"
+          # Only available on prism > 1.4.0
+          Prism::Translation::ParserCurrent
+        end
+      end
+
       def parse(source)
         # Parse Ruby code into AST
         buffer = Parser::Source::Buffer.new("(phlex)", source: source)
-        ast = Parser::CurrentRuby.new.parse(buffer)
-
+        ast = parser_for_current_ruby.new.parse(buffer)
         # Find the view_template method
         view_template_method = find_view_template_method(ast)
         raise ParseError, "No view_template method found in Phlex component" unless view_template_method
