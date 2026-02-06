@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class TestPhlexSecurity < Minitest::Test
@@ -5,54 +7,91 @@ class TestPhlexSecurity < Minitest::Test
     @generator = Any2Any::Generators::PhlexGenerator.new
   end
 
-  def test_escapes_interpolation_in_attributes
-    # If the user input contains #{...}, it should be escaped so it's not evaluated by Ruby
-    # when the Phlex component is executed.
+  def test_prevents_code_injection_in_static_content
+    # User input that tries to break out of the string and execute code
+    # If the output is: plain "User input #{system('ls')} here"
+    # It will execute the code when the Phlex component runs.
+    malicious_text = 'User input #{system("echo hacked")} here'
 
-    # Simulate a node with an attribute containing interpolation syntax
-    # e.g. <div data-val="#{system('rm -rf /')}"></div>
-    element = Any2Any::IR::Element.new(
-      tag_name: "div",
-      attributes: { "data-val" => "\#{system('rm -rf /')}" }
+    ir = Any2Any::IR::Template.new(
+      children: [
+        Any2Any::IR::StaticContent.new(text: malicious_text)
+      ]
     )
 
-    generated_code = @generator.generate(Any2Any::IR::Template.new(children: [element]))
+    output = @generator.generate(ir)
 
-    # We expect the output to have escaped the interpolation
-    # Bad output: div(data-val: "#{system('rm -rf /')}")
-    # Good output: div(data-val: "\#{system('rm -rf /')}")
+    # We expect the #{ to be escaped so it's not interpolated
+    # The output code should look something like: plain "User input \#{system(\"echo hacked\")} here"
+    # Or properly escaped to prevent interpolation.
 
-    # NOTE: In Ruby string literal for the expected output:
-    # We want the generated code to contain: data-val: "\#{...}"
-    # So we need to check for backslash before hash.
+    # Currently it probably generates: plain "User input #{system(\"echo hacked\")} here"
+    # which effectively executes the code.
 
-    assert_includes generated_code, '\\#{'
-    refute_includes generated_code, ' #{'
+    refute_match(/#{Regexp.escape('plain "User input #{system(\"echo hacked\")} here"')}/, output, "Should not allow interpolation in static content")
+    assert_match(/\\#\{/, output, "Should escape interpolation sequences")
   end
 
-  def test_escapes_backslashes_in_attributes
-    # If input is "\"", it should be escaped to "\\" in the string literal
+  def test_prevents_code_injection_in_attributes
+    # Similar attack in attributes
+    malicious_attr = 'val" + system("echo hacked").to_s + "'
 
-    element = Any2Any::IR::Element.new(
-      tag_name: "div",
-      attributes: { "data-val" => "\\" }
+    ir = Any2Any::IR::Template.new(
+      children: [
+        Any2Any::IR::Element.new(
+          tag_name: "div",
+          attributes: {"data-test" => malicious_attr}
+        )
+      ]
     )
 
-    generated_code = @generator.generate(Any2Any::IR::Template.new(children: [element]))
+    output = @generator.generate(ir)
 
-    # Input: \
-    # Desired Ruby code: div(data-val: "\\")
-    # Inside the string literal it should be "\\" (two backslashes)
+    # If unescaped, it might look like: data-test: "val" + system("echo hacked").to_s + ""
+    # We want it to be: data-test: "val\" + system(\"echo hacked\").to_s + \""
+    # But wait, if it's "val" + ... that would be valid ruby code if not in a string.
+    # The generator wraps values in quotes: "#{key}: \"#{escape_quotes(value)}\""
 
-    assert_includes generated_code, '\\\\'
+    # So if malicious_attr is `val"`, output becomes `"val\""` which is safe.
+    # But if malicious_attr contains interpolation `#{}`
+
+    malicious_attr_interp = '#{system("echo hacked")}'
+    ir = Any2Any::IR::Template.new(
+      children: [
+        Any2Any::IR::Element.new(
+          tag_name: "div",
+          attributes: {"data-test" => malicious_attr_interp}
+        )
+      ]
+    )
+
+    output = @generator.generate(ir)
+
+    assert_match(/\\#\{/, output, "Should escape interpolation sequences in attributes")
   end
 
-  def test_escapes_interpolation_in_static_content
-    content = Any2Any::IR::StaticContent.new(text: "\#{system('ls')}")
+  def test_escapes_backslashes
+    # If we have a backslash at the end, it might escape the closing quote
+    # text: "foo\"
+    # escaped: "foo\\"
+    # in code: plain "foo\\" -> string is "foo\"
 
-    generated_code = @generator.generate(Any2Any::IR::Template.new(children: [content]))
+    # If we don't escape backslash:
+    # text: "foo\"
+    # escaped: "foo\""  (assuming we only escape quotes)
+    # in code: plain "foo\"" -> Syntax error? Or escapes the quote?
+    # plain "foo\"" -> The string doesn't end! The quote is escaped.
 
-    # plain "\#{system('ls')}"
-    assert_includes generated_code, '\\#{'
+    text = 'foo\\'
+    ir = Any2Any::IR::Template.new(
+      children: [
+        Any2Any::IR::StaticContent.new(text: text)
+      ]
+    )
+
+    output = @generator.generate(ir)
+
+    # Should be escaped to double backslash
+    assert_match(/foo\\\\/, output, "Should escape backslashes")
   end
 end
