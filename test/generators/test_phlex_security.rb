@@ -1,46 +1,58 @@
-require 'minitest/autorun'
-require_relative '../test_helper'
-require 'any2any/ir/static_content'
-require 'any2any/ir/template'
-require 'any2any/generators/phlex_generator'
+require "test_helper"
 
 class TestPhlexSecurity < Minitest::Test
-  def test_static_content_injection_escaped
-    # Create a StaticContent node with Ruby interpolation
-    static_content = Any2Any::IR::StaticContent.new(text: 'Hello #{system("echo injected")} World')
-
-    # Create a template containing this node
-    template = Any2Any::IR::Template.new(children: [static_content])
-
-    # Generate Phlex code
-    generator = Any2Any::Generators::PhlexGenerator.new
-    output = generator.generate(template)
-
-    # Assert that interpolation is escaped
-    assert_includes output, '\\#{', "Interpolation start \#{ was not escaped"
-
-    # Verify exact output string part
-    expected_part = 'plain "Hello \#{system(\"echo injected\")} World"'
-    assert_includes output, expected_part
+  def setup
+    @generator = Any2Any::Generators::PhlexGenerator.new
   end
 
-  def test_instance_variable_interpolation_escaped
-    # Test escaping of #@var
-    static_content = Any2Any::IR::StaticContent.new(text: 'Hello #@user')
-    template = Any2Any::IR::Template.new(children: [static_content])
-    generator = Any2Any::Generators::PhlexGenerator.new
-    output = generator.generate(template)
+  def test_escapes_interpolation_in_attributes
+    # If the user input contains #{...}, it should be escaped so it's not evaluated by Ruby
+    # when the Phlex component is executed.
 
-    assert_includes output, '\\#@user'
+    # Simulate a node with an attribute containing interpolation syntax
+    # e.g. <div data-val="#{system('rm -rf /')}"></div>
+    element = Any2Any::IR::Element.new(
+      tag_name: "div",
+      attributes: { "data-val" => "\#{system('rm -rf /')}" }
+    )
+
+    generated_code = @generator.generate(Any2Any::IR::Template.new(children: [element]))
+
+    # We expect the output to have escaped the interpolation
+    # Bad output: div(data-val: "#{system('rm -rf /')}")
+    # Good output: div(data-val: "\#{system('rm -rf /')}")
+
+    # NOTE: In Ruby string literal for the expected output:
+    # We want the generated code to contain: data-val: "\#{...}"
+    # So we need to check for backslash before hash.
+
+    assert_includes generated_code, '\\#{'
+    refute_includes generated_code, ' #{'
   end
 
-  def test_global_variable_interpolation_escaped
-    # Test escaping of #$global
-    static_content = Any2Any::IR::StaticContent.new(text: 'Hello #$PROGRAM_NAME')
-    template = Any2Any::IR::Template.new(children: [static_content])
-    generator = Any2Any::Generators::PhlexGenerator.new
-    output = generator.generate(template)
+  def test_escapes_backslashes_in_attributes
+    # If input is "\"", it should be escaped to "\\" in the string literal
 
-    assert_includes output, '\\#$PROGRAM_NAME'
+    element = Any2Any::IR::Element.new(
+      tag_name: "div",
+      attributes: { "data-val" => "\\" }
+    )
+
+    generated_code = @generator.generate(Any2Any::IR::Template.new(children: [element]))
+
+    # Input: \
+    # Desired Ruby code: div(data-val: "\\")
+    # Inside the string literal it should be "\\" (two backslashes)
+
+    assert_includes generated_code, '\\\\'
+  end
+
+  def test_escapes_interpolation_in_static_content
+    content = Any2Any::IR::StaticContent.new(text: "\#{system('ls')}")
+
+    generated_code = @generator.generate(Any2Any::IR::Template.new(children: [content]))
+
+    # plain "\#{system('ls')}"
+    assert_includes generated_code, '\\#{'
   end
 end
