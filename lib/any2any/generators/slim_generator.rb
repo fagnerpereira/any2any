@@ -53,7 +53,7 @@ module Any2Any
 
         # Generate attributes using HTML-style syntax: class="value"
         if element.attributes.any?
-          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(value.to_s)}\"" }.join(" ")
+          attributes_str = element.attributes.map { |key, value| "#{key}=\"#{escape_attribute(escape_interpolation(value.to_s))}\"" }.join(" ")
           output << " #{attributes_str}"
         end
 
@@ -64,8 +64,11 @@ module Any2Any
 
         # Handle inline text content
         if element.children.length == 1 && element.children.first.is_a?(IR::StaticContent)
-          output << " #{element.children.first.text.strip}"
-          return output
+          text = element.children.first.text
+          if !text.include?("\n")
+            output << " #{escape_interpolation(text.strip)}"
+            return output
+          end
         end
 
         # Generate children
@@ -151,10 +154,20 @@ module Any2Any
         # Skip whitespace-only content
         return "" if content.text.strip.empty?
 
+        escaped_text = escape_interpolation(content.text)
+        lines = escaped_text.lines
+
         output = String.new
-        output << current_indent
-        output << "| #{content.text}"
-        output
+        lines.each_with_index do |line, index|
+          output << current_indent
+          output << "| #{line.chomp}"
+          output << "\n" if index < lines.size - 1 || escaped_text.end_with?("\n")
+        end
+        output.chomp
+      end
+
+      def escape_interpolation(text)
+        text.gsub('\\') { '\\\\' }.gsub('#{', '\#{')
       end
 
       def generate_comment(comment)
