@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestHamlParser < Minitest::Test
   def setup
@@ -16,7 +16,7 @@ class TestHamlParser < Minitest::Test
 
     element = ir.children.first
     assert_instance_of Any2Any::IR::Element, element
-    assert_equal 'div', element.tag_name
+    assert_equal "div", element.tag_name
   end
 
   def test_parses_nested
@@ -24,10 +24,10 @@ class TestHamlParser < Minitest::Test
     ir = @parser.parse(source)
 
     div = ir.children.first
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
     assert_equal 1, div.children.length
     p_tag = div.children.first
-    assert_equal 'p', p_tag.tag_name
+    assert_equal "p", p_tag.tag_name
   end
 
   def test_parses_expression
@@ -36,7 +36,7 @@ class TestHamlParser < Minitest::Test
 
     expr = ir.children.first
     assert_instance_of Any2Any::IR::Expression, expr
-    assert_equal '@name', expr.code
+    assert_equal "@name", expr.code
     assert_equal true, expr.escaped
   end
 

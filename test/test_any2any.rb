@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestAny2Any < Minitest::Test
   def test_any2any_module_exists
@@ -8,20 +8,20 @@ class TestAny2Any < Minitest::Test
   end
 
   def test_any2any_convert_method
-    result = Any2Any.convert('<div>Test</div>', from: :erb, to: :slim)
-    
+    result = Any2Any.convert("<div>Test</div>", from: :erb, to: :slim)
+
     assert_instance_of Hash, result
     assert result[:output]
   end
 
   def test_template_converter_alias
     # TemplateConverter should be the same as Any2Any
-    assert_equal Any2Any, Object.const_get('TemplateConverter')
+    assert_equal Any2Any, Object.const_get("TemplateConverter")
   end
 
   def test_template_converter_convert
-    result = Object.const_get('TemplateConverter').convert('<div>Test</div>', from: :erb, to: :slim)
-    
+    result = Object.const_get("TemplateConverter").convert("<div>Test</div>", from: :erb, to: :slim)
+
     assert_instance_of Hash, result
     assert result[:output]
   end
@@ -75,6 +75,6 @@ class TestAny2Any < Minitest::Test
   end
 
   def test_cli_class_exists
-    assert Object.const_get('TemplateConverter')::CLI
+    assert Object.const_get("TemplateConverter")::CLI
   end
 end

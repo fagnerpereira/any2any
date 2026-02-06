@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestAttributes < Minitest::Test
   def test_erb_with_class_attributes_to_slim
@@ -10,7 +10,7 @@ class TestAttributes < Minitest::Test
 
     assert output.include?('div class="container mx-auto"')
     assert output.include?('h1 class="text-xl font-bold"')
-    assert output.include?('Title')
+    assert output.include?("Title")
   end
 
   def test_erb_with_class_attributes_to_haml
@@ -20,7 +20,7 @@ class TestAttributes < Minitest::Test
 
     assert output.include?('%div{class: "container mx-auto"}')
     assert output.include?('%h1{class: "text-xl font-bold"}')
-    assert output.include?('Title')
+    assert output.include?("Title")
   end
 
   def test_erb_with_multiple_attributes_to_slim
@@ -28,7 +28,7 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :slim)
     output = result[:output]
 
-    assert output.include?('input')
+    assert output.include?("input")
     assert output.include?('type="text"')
     assert output.include?('name="email"')
     assert output.include?('class="form-input"')
@@ -40,7 +40,7 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :haml)
     output = result[:output]
 
-    assert output.include?('%input')
+    assert output.include?("%input")
     assert output.include?('type: "text"')
     assert output.include?('name: "email"')
     assert output.include?('class: "form-input"')
@@ -52,10 +52,10 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :slim)
     output = result[:output]
 
-    assert output.include?('div')
+    assert output.include?("div")
     assert output.include?('id="main"')
     assert output.include?('class="wrapper container"')
-    assert output.include?('Content')
+    assert output.include?("Content")
   end
 
   def test_erb_with_id_and_class_to_haml
@@ -63,10 +63,10 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :haml)
     output = result[:output]
 
-    assert output.include?('%div')
+    assert output.include?("%div")
     assert output.include?('id: "main"')
     assert output.include?('class: "wrapper container"')
-    assert output.include?('Content')
+    assert output.include?("Content")
   end
 
   def test_slim_with_attributes_to_erb
@@ -74,10 +74,10 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(slim_source, from: :slim, to: :erb)
     output = result[:output]
 
-    assert output.include?('<div')
+    assert output.include?("<div")
     assert output.include?('class="container"')
     assert output.include?('id="main"')
-    assert output.include?('<p')
+    assert output.include?("<p")
     assert output.include?('class="text"')
   end
 
@@ -86,10 +86,10 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(haml_source, from: :haml, to: :erb)
     output = result[:output]
 
-    assert output.include?('<div')
+    assert output.include?("<div")
     assert output.include?('class="container"')
     assert output.include?('id="main"')
-    assert output.include?('<p')
+    assert output.include?("<p")
     assert output.include?('class="text"')
   end
 
@@ -98,7 +98,7 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :slim)
     output = result[:output]
 
-    assert output.include?('button')
+    assert output.include?("button")
     assert output.include?('data-action="click"')
     assert output.include?('data-controller="modal"')
   end
@@ -108,7 +108,7 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :haml)
     output = result[:output]
 
-    assert output.include?('%button')
+    assert output.include?("%button")
     assert output.include?('data-action: "click"')
     assert output.include?('data-controller: "modal"')
   end
@@ -125,7 +125,7 @@ class TestAttributes < Minitest::Test
 
     assert output.include?('div class="md:w-2/3 w-full"')
     assert output.include?('h1 class="font-bold text-4xl"')
-    assert output.include?('Editing book')
+    assert output.include?("Editing book")
   end
 
   def test_complex_erb_to_haml_preserves_all_attributes
@@ -140,7 +140,7 @@ class TestAttributes < Minitest::Test
 
     assert output.include?('%div{class: "md:w-2/3 w-full"}')
     assert output.include?('%h1{class: "font-bold text-4xl"}')
-    assert output.include?('Editing book')
+    assert output.include?("Editing book")
   end
 
   def test_erb_with_inline_text_to_slim
@@ -166,7 +166,7 @@ class TestAttributes < Minitest::Test
     result = Any2Any.convert(erb_source, from: :erb, to: :phlex)
     output = result[:output]
 
-    assert output.include?('Phlex::HTML')
+    assert output.include?("Phlex::HTML")
     assert output.include?('class: "container"')
     assert output.include?('class: "text"')
   end

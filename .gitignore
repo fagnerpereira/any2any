@@ -2,4 +2,6 @@ vendor/
 .DS_Store
 coverage/
 .idea/
+coverage
+vendor
 *.gem

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestPhlexGenerator < Minitest::Test
   def setup
@@ -10,7 +10,7 @@ class TestPhlexGenerator < Minitest::Test
   def test_generates_simple_element
     ir = Any2Any::IR::Template.new(
       children: [
-        Any2Any::IR::Element.new(tag_name: 'div')
+        Any2Any::IR::Element.new(tag_name: "div")
       ]
     )
 
@@ -25,9 +25,9 @@ class TestPhlexGenerator < Minitest::Test
     ir = Any2Any::IR::Template.new(
       children: [
         Any2Any::IR::Element.new(
-          tag_name: 'div',
+          tag_name: "div",
           children: [
-            Any2Any::IR::Element.new(tag_name: 'p')
+            Any2Any::IR::Element.new(tag_name: "p")
           ]
         )
       ]
@@ -44,8 +44,8 @@ class TestPhlexGenerator < Minitest::Test
     ir = Any2Any::IR::Template.new(
       children: [
         Any2Any::IR::Element.new(
-          tag_name: 'div',
-          attributes: { 'class' => 'container', 'id' => 'main' }
+          tag_name: "div",
+          attributes: {"class" => "container", "id" => "main"}
         )
       ]
     )
@@ -60,7 +60,7 @@ class TestPhlexGenerator < Minitest::Test
   def test_generates_expression
     ir = Any2Any::IR::Template.new(
       children: [
-        Any2Any::IR::Expression.new(code: '@name', escaped: true)
+        Any2Any::IR::Expression.new(code: "@name", escaped: true)
       ]
     )
 
@@ -72,7 +72,7 @@ class TestPhlexGenerator < Minitest::Test
   def test_generates_unescaped_expression
     ir = Any2Any::IR::Template.new(
       children: [
-        Any2Any::IR::Expression.new(code: '@html_content', escaped: false)
+        Any2Any::IR::Expression.new(code: "@html_content", escaped: false)
       ]
     )
 
@@ -84,7 +84,7 @@ class TestPhlexGenerator < Minitest::Test
   def test_generates_static_content
     ir = Any2Any::IR::Template.new(
       children: [
-        Any2Any::IR::StaticContent.new(text: 'Hello World')
+        Any2Any::IR::StaticContent.new(text: "Hello World")
       ]
     )
 
@@ -96,7 +96,7 @@ class TestPhlexGenerator < Minitest::Test
   def test_generates_comment
     ir = Any2Any::IR::Template.new(
       children: [
-        Any2Any::IR::Comment.new(text: 'This is a comment', html_visible: true)
+        Any2Any::IR::Comment.new(text: "This is a comment", html_visible: true)
       ]
     )
 
@@ -109,9 +109,9 @@ class TestPhlexGenerator < Minitest::Test
     ir = Any2Any::IR::Template.new(
       children: [
         Any2Any::IR::Conditional.new(
-          condition: '@show',
+          condition: "@show",
           true_branch: [
-            Any2Any::IR::Element.new(tag_name: 'p')
+            Any2Any::IR::Element.new(tag_name: "p")
           ],
           false_branch: []
         )
@@ -129,10 +129,10 @@ class TestPhlexGenerator < Minitest::Test
     ir = Any2Any::IR::Template.new(
       children: [
         Any2Any::IR::Loop.new(
-          collection: '@items',
-          variable: 'item',
+          collection: "@items",
+          variable: "item",
           body: [
-            Any2Any::IR::Element.new(tag_name: 'li')
+            Any2Any::IR::Element.new(tag_name: "li")
           ]
         )
       ]
@@ -149,7 +149,7 @@ class TestPhlexGenerator < Minitest::Test
     ir = Any2Any::IR::Template.new(
       children: [
         Any2Any::IR::Element.new(
-          tag_name: 'br',
+          tag_name: "br",
           self_closing: true
         )
       ]

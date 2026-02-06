@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 module Any2Any
   module Generators
     # Base generator class
@@ -27,7 +25,7 @@ module Any2Any
       end
 
       def current_indent
-        '  ' * @indent_level
+        "  " * @indent_level
       end
 
       def add_warning(message, severity: :warning, suggestion: nil)
@@ -50,18 +48,18 @@ module Any2Any
       # HTML attribute escaping
       def escape_attribute(value)
         return value unless value.is_a?(String)
-        value.gsub('&', '&amp;').gsub('"', '&quot;').gsub('<', '&lt;').gsub('>', '&gt;')
+        value.gsub("&", "&amp;").gsub('"', "&quot;").gsub("<", "&lt;").gsub(">", "&gt;")
       end
 
       # HTML content escaping
       def escape_html(content)
         return content unless content.is_a?(String)
         content
-          .gsub('&', '&amp;')
-          .gsub('<', '&lt;')
-          .gsub('>', '&gt;')
-          .gsub('"', '&quot;')
-          .gsub("'", '&#39;')
+          .gsub("&", "&amp;")
+          .gsub("<", "&lt;")
+          .gsub(">", "&gt;")
+          .gsub('"', "&quot;")
+          .gsub("'", "&#39;")
       end
     end
   end

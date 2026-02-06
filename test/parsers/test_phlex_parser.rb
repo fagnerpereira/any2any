@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 
 class TestPhlexParser < Minitest::Test
   def setup
@@ -8,7 +8,7 @@ class TestPhlexParser < Minitest::Test
   end
 
   def test_parses_simple_element
-    source = File.read('test/fixtures/phlex/simple_div.rb')
+    source = File.read("test/fixtures/phlex/simple_div.rb")
     ir = @parser.parse(source)
 
     assert_instance_of Any2Any::IR::Template, ir
@@ -16,38 +16,38 @@ class TestPhlexParser < Minitest::Test
 
     div = ir.children.first
     assert_instance_of Any2Any::IR::Element, div
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
   end
 
   def test_parses_nested_elements
-    source = File.read('test/fixtures/phlex/nested_slim.rb')
+    source = File.read("test/fixtures/phlex/nested_slim.rb")
     ir = @parser.parse(source)
 
     assert_instance_of Any2Any::IR::Template, ir
     div = ir.children.first
-    assert_equal 'div', div.tag_name
+    assert_equal "div", div.tag_name
     assert_equal 1, div.children.length
 
     p_tag = div.children.first
-    assert_equal 'p', p_tag.tag_name
+    assert_equal "p", p_tag.tag_name
   end
 
   def test_parses_element_with_attributes
-    source = File.read('test/fixtures/phlex/attributes.rb')
+    source = File.read("test/fixtures/phlex/attributes.rb")
     ir = @parser.parse(source)
 
     div = ir.children.first
-    assert_equal 'div', div.tag_name
-    assert_equal 'container', div.attributes['class']
+    assert_equal "div", div.tag_name
+    assert_equal "container", div.attributes["class"]
 
     p_tag = div.children.first
-    assert_equal 'p', p_tag.tag_name
-    assert_equal 'intro', p_tag.attributes['id']
-    assert_equal 'text', p_tag.attributes['class']
+    assert_equal "p", p_tag.tag_name
+    assert_equal "intro", p_tag.attributes["id"]
+    assert_equal "text", p_tag.attributes["class"]
   end
 
   def test_parses_expression
-    source = File.read('test/fixtures/phlex/with_expression_slim.rb')
+    source = File.read("test/fixtures/phlex/with_expression_slim.rb")
     ir = @parser.parse(source)
 
     div = ir.children.first
