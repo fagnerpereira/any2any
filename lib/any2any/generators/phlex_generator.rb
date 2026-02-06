@@ -208,6 +208,8 @@ module Any2Any
             .gsub('\\') { '\\\\' }
             .gsub('"') { '\\"' }
             .gsub('#{') { '\\#{' }
+            .gsub('#@') { '\\#@' }
+            .gsub('#$') { '\\#$' }
       end
     end
   end
