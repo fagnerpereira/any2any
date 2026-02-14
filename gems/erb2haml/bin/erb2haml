@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "erb2haml"
+
+Erb2Haml::CLI.start(ARGV)
