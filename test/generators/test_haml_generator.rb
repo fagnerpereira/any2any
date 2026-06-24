@@ -105,6 +105,7 @@ class TestHamlGenerator < Minitest::Test
     ir = Any2Any::IR::Template.new(children: [element])
 
     output = @generator.generate(ir)
-    assert output.include?("&lt;script&gt;")
+    # HAML attribute values are Ruby string literals — HAML encodes HTML at render time.
+    assert output.include?('"<script>"')
   end
 end

@@ -61,6 +61,21 @@ module Any2Any
           .gsub('"', "&quot;")
           .gsub("'", "&#39;")
       end
+
+      # Produce a safe Ruby string literal for use inside template attribute hashes.
+      # Uses inspect so that special chars are properly escaped, then additionally
+      # neutralises #{...} sequences which inspect does not escape.
+      def ruby_string_literal(text)
+        return '""' unless text.is_a?(String)
+        text.inspect.gsub('#{', '\#{')
+      end
+
+      # Escape interpolation sequences inside plain template text so that
+      # template engines (HAML, Slim) cannot execute embedded Ruby.
+      def escape_interpolation(text)
+        return text unless text.is_a?(String)
+        text.gsub("\\", "\\\\").gsub('#{', '\#{')
+      end
     end
   end
 end
