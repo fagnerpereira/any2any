@@ -53,8 +53,7 @@ module Any2Any
         # Generate attributes using HAML hash syntax {key: "value"}
         if element.attributes.any?
           attrs = element.attributes.map do |key, value|
-            # Use symbol keys for HAML
-            "#{key}: \"#{escape_attribute(value.to_s)}\""
+            "#{key}: #{ruby_string_literal(value.to_s)}"
           end.join(", ")
           output << "{#{attrs}}"
         end
@@ -69,10 +68,7 @@ module Any2Any
            element.children.first.is_a?(IR::StaticContent) &&
            !element.children.first.text.include?("\n")
 
-          # HAML handles inline text safely if it's on the same line after the tag
-          # e.g. %div %content -> <div>%content</div>
-          # But we should trim it
-          output << " #{element.children.first.text.strip}"
+          output << " #{escape_interpolation(element.children.first.text.strip)}"
           return output
         end
 
@@ -182,12 +178,14 @@ module Any2Any
 
           output << current_indent
 
+          escaped = escape_interpolation(line_content)
+
           # Escape lines starting with HAML special characters
-          if line_content.lstrip.match?(/^[%#=\-\/\.!]/)
+          if escaped.lstrip.match?(/^[%#=\-\/\.!]/)
             output << "\\"
           end
 
-          output << line_content
+          output << escaped
           output << "\n" unless index == lines.size - 1
         end
 
