@@ -77,6 +77,12 @@ module Any2Any
         return text unless text.is_a?(String)
         text.gsub("\\") { "\\\\" }.gsub('#{', '\#{')
       end
+
+      # ERB tag escaping (prevents injection)
+      def escape_erb_tags(content)
+        return content unless content.is_a?(String)
+        content.gsub("<%", "<%%")
+      end
     end
   end
 end
